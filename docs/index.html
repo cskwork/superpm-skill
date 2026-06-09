@@ -8,28 +8,30 @@
 <meta property="og:title" content="/superpm - one PM request, a verified artifact" />
 <meta property="og:description" content="One skill, nine PM domains. Capture intent, route by domain, draft the smallest useful artifact, verify with an independent critic. English and Korean." />
 <meta property="og:type" content="website" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%2305070a'/%3E%3Cpath d='M14 46 V20 l10 16 10-16 V46' fill='none' stroke='%235cff9a' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230b0d18'/%3E%3Cpath d='M14 46 V20 l10 16 10-16 V46' fill='none' stroke='%239d8bff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 <style>
   :root {
-    --bg: #05070a;
-    --ink: #f4f7fb;
-    --muted: #a8b4c2;
-    --soft: #728091;
-    --line: rgba(178, 221, 255, .16);
-    --line-strong: rgba(178, 221, 255, .28);
-    --panel: rgba(10, 16, 22, .82);
-    --panel-2: rgba(8, 12, 17, .94);
-    --panel-3: rgba(17, 25, 32, .72);
-    --green: #5cff9a;
-    --green-soft: rgba(92, 255, 154, .13);
-    --cyan: #64d8ff;
-    --cyan-soft: rgba(100, 216, 255, .12);
-    --amber: #ffbf47;
-    --amber-soft: rgba(255, 191, 71, .13);
-    --red: #ff6f6f;
-    --red-soft: rgba(255, 111, 111, .11);
+    --bg: #0b0d18;
+    --ink: #f1f2fb;
+    --muted: #aab0c8;
+    --soft: #767e9c;
+    --line: rgba(170, 178, 230, .16);
+    --line-strong: rgba(170, 178, 230, .30);
+    --panel: rgba(18, 20, 38, .82);
+    --panel-2: rgba(13, 15, 28, .94);
+    --panel-3: rgba(26, 28, 50, .72);
+    --brand: #9d8bff;
+    --brand-soft: rgba(157, 139, 255, .15);
+    --green: #3fdcb6;
+    --green-soft: rgba(63, 220, 182, .14);
+    --cyan: #6aa6ff;
+    --cyan-soft: rgba(106, 166, 255, .13);
+    --amber: #ffc56b;
+    --amber-soft: rgba(255, 197, 107, .14);
+    --red: #ff7d6b;
+    --red-soft: rgba(255, 125, 107, .13);
     --violet: #b69cff;
-    --violet-soft: rgba(182, 156, 255, .13);
+    --violet-soft: rgba(182, 156, 255, .14);
     --pink: #ff8fcf;
     --blue: #6ea8ff;
     --blue-soft: rgba(110, 168, 255, .13);
@@ -45,9 +47,11 @@
     margin: 0;
     min-width: 320px;
     background:
-      linear-gradient(180deg, rgba(5, 7, 10, .64), var(--bg) 720px),
-      repeating-linear-gradient(90deg, rgba(255,255,255,.032) 0 1px, transparent 1px 92px),
-      repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0 1px, transparent 1px 92px),
+      radial-gradient(1200px 540px at 80% -10%, rgba(157,139,255,.18), transparent 60%),
+      radial-gradient(900px 480px at 0% 8%, rgba(63,220,182,.07), transparent 55%),
+      linear-gradient(180deg, rgba(11,13,24,.5), var(--bg) 760px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0 1px, transparent 1px 120px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.016) 0 1px, transparent 1px 120px),
       var(--bg);
     color: var(--ink);
     font-family: var(--sans);
@@ -63,11 +67,11 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: .22;
+    opacity: .12;
     background-image:
-      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-    background-size: 24px 24px;
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 34px 34px;
     mask-image: linear-gradient(to bottom, #000, transparent 78%);
   }
 
@@ -114,8 +118,8 @@
     width: 9px;
     height: 9px;
     border-radius: 99px;
-    background: var(--green);
-    box-shadow: 0 0 18px rgba(92, 255, 154, .9);
+    background: var(--brand);
+    box-shadow: 0 0 18px rgba(157, 139, 255, .9);
     flex: 0 0 auto;
     animation: ledPulse 1.8s ease-in-out infinite;
   }
@@ -144,8 +148,8 @@
   }
   .gatebar button:first-child { border-left: 0; }
   .gatebar button[aria-pressed="true"] {
-    background: var(--green-soft);
-    color: var(--green);
+    background: var(--brand-soft);
+    color: var(--brand);
   }
   .gatebar button:disabled {
     opacity: .38;
@@ -203,8 +207,8 @@
     padding: 8px 12px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: rgba(5, 7, 10, .62);
-    color: var(--green);
+    background: rgba(11, 13, 24, .6);
+    color: var(--brand);
     font: 700 12px/1 var(--mono);
     letter-spacing: .09em;
     text-transform: uppercase;
@@ -214,7 +218,7 @@
     content: "";
     width: 34px;
     height: 1px;
-    background: linear-gradient(90deg, var(--green), transparent);
+    background: linear-gradient(90deg, var(--brand), transparent);
   }
 
   h1 {
@@ -269,19 +273,19 @@
   }
   .btn:hover {
     transform: translateY(-2px);
-    border-color: rgba(100, 216, 255, .64);
-    background: rgba(100, 216, 255, .08);
-    color: var(--cyan);
+    border-color: rgba(157, 139, 255, .6);
+    background: rgba(157, 139, 255, .09);
+    color: var(--brand);
   }
   .btn.primary {
-    color: #031108;
-    border-color: rgba(92, 255, 154, .88);
-    background: linear-gradient(180deg, #8dffb9, var(--green));
-    box-shadow: 0 16px 54px rgba(92, 255, 154, .21);
+    color: #14102e;
+    border-color: rgba(157, 139, 255, .9);
+    background: linear-gradient(180deg, #b8a8ff, var(--brand));
+    box-shadow: 0 16px 54px rgba(157, 139, 255, .26);
   }
   .btn.primary:hover {
-    color: #031108;
-    background: linear-gradient(180deg, #b5ffd0, var(--green));
+    color: #14102e;
+    background: linear-gradient(180deg, #cdc1ff, var(--brand));
   }
 
   .proof-panel {
@@ -328,6 +332,16 @@
     margin-left: auto;
     color: var(--soft);
     font: 12px var(--mono);
+  }
+  .doc-chip {
+    margin-left: 0;
+    padding: 4px 9px;
+    border: 1px solid var(--brand-soft);
+    border-radius: 999px;
+    color: var(--brand);
+    background: var(--brand-soft);
+    font: 700 11px/1 var(--mono);
+    letter-spacing: .04em;
   }
   .console-card pre {
     margin: 0;
@@ -397,7 +411,7 @@
     display: grid;
     place-items: center;
     min-height: 76px;
-    border: 1px dashed rgba(92, 255, 154, .58);
+    border: 1px dashed rgba(63, 220, 182, .55);
     color: var(--green);
     background: var(--green-soft);
     font: 900 20px/1 var(--mono);
@@ -472,7 +486,7 @@
   .metric strong {
     display: block;
     margin-bottom: 8px;
-    color: var(--green);
+    color: var(--brand);
     font: 900 calc(34px * var(--fs))/1 var(--mono);
   }
   .metric span {
@@ -520,7 +534,7 @@
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background:
-      linear-gradient(180deg, rgba(100,216,255,.08), transparent),
+      linear-gradient(180deg, rgba(157,139,255,.08), transparent),
       var(--panel-2);
     overflow: hidden;
   }
@@ -528,7 +542,7 @@
     content: "";
     position: absolute;
     inset: 22px;
-    border: 1px solid rgba(92,255,154,.22);
+    border: 1px solid rgba(157,139,255,.20);
     transform: skewY(-8deg);
     opacity: .68;
   }
@@ -547,7 +561,7 @@
     font: 700 12px/1.25 var(--mono);
   }
   .route-step b { color: var(--ink); }
-  .route-step.pass { border-color: rgba(92,255,154,.46); color: var(--green); }
+  .route-step.pass { border-color: rgba(63,220,182,.46); color: var(--green); }
   .route-step.red { border-color: rgba(255,111,111,.42); color: var(--red); }
 
   .mode-grid {
@@ -567,7 +581,7 @@
   }
   .mode-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(100,216,255,.58);
+    border-color: rgba(157,139,255,.55);
   }
   .mode-card::after {
     content: "";
@@ -577,7 +591,7 @@
     bottom: 20px;
     height: 3px;
     border-radius: 99px;
-    background: var(--green);
+    background: var(--brand);
     opacity: .72;
   }
   .mode-card.strategy::after { background: var(--cyan); }
@@ -625,9 +639,9 @@
     width: 34px;
     height: 34px;
     margin-bottom: 24px;
-    border: 1px solid rgba(92,255,154,.44);
-    color: var(--green);
-    background: var(--green-soft);
+    border: 1px solid rgba(157,139,255,.44);
+    color: var(--brand);
+    background: var(--brand-soft);
     border-radius: 4px;
     font: 900 13px/1 var(--mono);
   }
@@ -799,7 +813,7 @@
   }
   @keyframes stampPulse {
     0%, 100% { transform: rotateZ(4deg) scale(1); box-shadow: 0 24px 80px rgba(0,0,0,.48); }
-    50% { transform: rotateZ(2deg) scale(1.03); box-shadow: 0 24px 90px rgba(92,255,154,.12); }
+    50% { transform: rotateZ(2deg) scale(1.03); box-shadow: 0 24px 90px rgba(63,220,182,.14); }
   }
   @keyframes fillTrack {
     0%, 100% { transform: scaleX(.68); }
@@ -924,22 +938,20 @@
         <div class="stamp">READY</div>
       </div>
       <div class="console-card">
-        <div class="console-top"><i></i><i></i><i></i><span>critic.real.decision</span></div>
-<pre class="en"><span class="c-cyan">/superpm</span> write a PRD for referral
-<span class="c-soft">domain</span> EXECUTE
-<span class="c-red">critic</span> RISK: no success metric
-<span class="c-green">draft</span> metric added, non-goals set
-<span class="c-green">deliver</span> decision-ready, 1 risk noted
-<span class="c-green">done</span> stop</pre>
-<pre class="ko"><span class="c-cyan">/superpm</span> 추천 기능 PRD 써줘
-<span class="c-soft">domain</span> EXECUTE
-<span class="c-red">critic</span> RISK: 성공지표 없음
-<span class="c-green">draft</span> 지표 추가, non-goal 명시
-<span class="c-green">deliver</span> 의사결정 준비, risk 1건
-<span class="c-green">done</span> 멈춤</pre>
+        <div class="console-top"><span class="doc-chip">PRD &middot; EXECUTE</span><span>in review</span></div>
+<pre class="en"><span class="c-soft">Problem</span>    referral has no loop
+<span class="c-soft">Goal</span>       invite &rarr; activated friend
+<span class="c-soft">Metric</span>     <span class="c-red">missing &mdash; critic blocker</span>
+<span class="c-soft">Non-goals</span>  <span class="c-green">defined</span>
+<span class="c-soft">Decision</span>   <span class="c-green">ready once metric set</span></pre>
+<pre class="ko"><span class="c-soft">문제</span>      추천에 루프가 없음
+<span class="c-soft">목표</span>      초대 &rarr; 활성 친구
+<span class="c-soft">성공지표</span>  <span class="c-red">없음 &mdash; critic blocker</span>
+<span class="c-soft">non-goal</span>  <span class="c-green">정의됨</span>
+<span class="c-soft">의사결정</span>  <span class="c-green">지표 설정 후 준비</span></pre>
       </div>
       <div class="signal-card">
-        <h3><span class="en">Run telemetry</span><span class="ko">실행 신호</span></h3>
+        <h3><span class="en">Decision signals</span><span class="ko">의사결정 신호</span></h3>
         <div class="signal-row"><span><span class="en">decision</span><span class="ko">의사결정</span></span><div class="track"><span></span></div><b><span class="en">framed</span><span class="ko">고정됨</span></b></div>
         <div class="signal-row"><span><span class="en">claims</span><span class="ko">주장</span></span><div class="track"><span></span></div><b><span class="en">sourced</span><span class="ko">근거화</span></b></div>
         <div class="signal-row"><span><span class="en">critic</span><span class="ko">critic</span></span><div class="track"><span></span></div><b><span class="en">risks up</span><span class="ko">risk 표면화</span></b></div>
@@ -1308,15 +1320,15 @@ ln -s "$(pwd)/superpm-skill" &lt;your-agent-skills-dir&gt;/superpm
       ctx.clearRect(0, 0, w, h);
 
       var gradient = ctx.createLinearGradient(0, 0, w, h);
-      gradient.addColorStop(0, "rgba(92,255,154,.18)");
-      gradient.addColorStop(.42, "rgba(100,216,255,.13)");
-      gradient.addColorStop(1, "rgba(182,156,255,.08)");
+      gradient.addColorStop(0, "rgba(157,139,255,.20)");
+      gradient.addColorStop(.42, "rgba(63,220,182,.12)");
+      gradient.addColorStop(1, "rgba(106,166,255,.08)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, w, h);
 
       ctx.save();
-      ctx.globalAlpha = .22;
-      ctx.strokeStyle = "rgba(244,247,251,.16)";
+      ctx.globalAlpha = .14;
+      ctx.strokeStyle = "rgba(231,233,251,.12)";
       ctx.lineWidth = 1;
       for (var x = -80; x < w + 160; x += 92) {
         ctx.beginPath();
@@ -1334,10 +1346,10 @@ ln -s "$(pwd)/superpm-skill" &lt;your-agent-skills-dir&gt;/superpm
 
       var pts = nodes.map(point);
       for (var i = 0; i < pts.length - 1; i += 1) {
-        line(pts[i], pts[i + 1], "rgba(100,216,255,.28)", 1.2);
+        line(pts[i], pts[i + 1], "rgba(157,139,255,.30)", 1.2);
       }
-      line(pts[0], pts[3], "rgba(92,255,154,.18)", 1);
-      line(pts[1], pts[4], "rgba(182,156,255,.17)", 1);
+      line(pts[0], pts[3], "rgba(63,220,182,.18)", 1);
+      line(pts[1], pts[4], "rgba(106,166,255,.16)", 1);
 
       var phase = reduce ? .52 : ((t / 2400) % 1);
       for (var j = 0; j < pts.length - 1; j += 1) {
@@ -1348,7 +1360,7 @@ ln -s "$(pwd)/superpm-skill" &lt;your-agent-skills-dir&gt;/superpm
         var py = a.y + (b.y - a.y) * offset;
         ctx.beginPath();
         ctx.arc(px, py, 4.2, 0, Math.PI * 2);
-        ctx.fillStyle = j === 3 ? "rgba(255,111,111,.88)" : "rgba(92,255,154,.9)";
+        ctx.fillStyle = j === 3 ? "rgba(255,125,107,.9)" : "rgba(157,139,255,.92)";
         ctx.shadowColor = ctx.fillStyle;
         ctx.shadowBlur = 18;
         ctx.fill();
@@ -1358,8 +1370,8 @@ ln -s "$(pwd)/superpm-skill" &lt;your-agent-skills-dir&gt;/superpm
       pts.forEach(function (p, index) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, 18, 0, Math.PI * 2);
-        ctx.fillStyle = index === 3 ? "rgba(255,111,111,.18)" : "rgba(5,7,10,.72)";
-        ctx.strokeStyle = index === 3 ? "rgba(255,111,111,.7)" : "rgba(92,255,154,.72)";
+        ctx.fillStyle = index === 3 ? "rgba(255,125,107,.18)" : "rgba(13,15,28,.72)";
+        ctx.strokeStyle = index === 3 ? "rgba(255,125,107,.7)" : "rgba(157,139,255,.72)";
         ctx.lineWidth = 1.5;
         ctx.fill();
         ctx.stroke();
