@@ -20,6 +20,7 @@ Output: the chosen beachhead, the expansion path out of it, and why you can win 
 The firmographic + behavioral profile of accounts that get the most value and are easiest to
 win/keep. Fields (B2B): industry, size, tech stack, trigger event, buying-committee roles, the
 pain. Output: the ICP + disqualifiers (who to say no to). An ICP with no disqualifiers is too broad.
+With no CRM data, source the trigger event and pain from real buyer signal (`reference/signal.md`).
 
 ## growth-loops
 
@@ -42,7 +43,8 @@ metrics that prove it is working (PLG: activation/expansion; SLG: pipeline/win-r
 
 A sales-ready card per key competitor: their positioning, strengths, weaknesses, your
 differentiation, landmines to set, objection-handling ("when they say X, we say Y"), and a trap
-question. Output: a scannable card a rep can use live. Keep claims truthful and verifiable.
+question. Output: a scannable card a rep can use live. Keep claims truthful and verifiable -
+ground each in real, recent competitor and user signal (`reference/signal.md`).
 
 ## Critic completeness anchors
 

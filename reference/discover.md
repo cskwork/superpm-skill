@@ -9,7 +9,8 @@ Generate solution ideas from multiple lenses, then converge.
 
 - **Lenses:** jobs-to-be-done, current pain points, competitor gaps, adjacent workflows, tech
   enablers, business-model shifts. Existing product: also mine support tickets, churn reasons,
-  feature requests. New product: also mine analogous markets and first-principles needs.
+  feature requests. New product: also mine analogous markets and first-principles needs. With no
+  first-party data, mine real pains and competitor gaps from live signal (`reference/signal.md`).
 - **Divergent output:** 10-20 ideas, each as `<who> can now <do what> so that <outcome>`.
   Cluster by theme; flag the 3 worth testing first and why. Use when the user wants a wide menu.
 
@@ -100,9 +101,9 @@ Desired Outcome (one measurable business/product outcome)
         └── Experiments (tests that de-risk the solution)
 ```
 
-Rules: opportunities are needs phrased in the customer's words, never solutions. One outcome per
-tree. Compare solutions *within* an opportunity, not across. Output the tree + the opportunity
-you would pursue first and why.
+Rules: opportunities are needs phrased in the customer's words (sourced from research or live
+signal - `reference/signal.md`), never solutions. One outcome per tree. Compare solutions
+*within* an opportunity, not across. Output the tree + the opportunity you would pursue first and why.
 
 ## interview-script (JTBD)
 

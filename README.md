@@ -49,7 +49,7 @@ The same loop runs for every domain; only the framework that loads changes.
 | **STRATEGY** | strategy canvas, vision, value proposition, lean/business model, monetization, pricing, SWOT/PESTLE/Porter/Ansoff |
 | **EXECUTE** | PRD, OKRs, outcome roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization frameworks, red-team |
 | **STORYBOARD** | 화면설계서/기능명세 screen design docs - wireframe (plan-first) or replica/Figma, per-element spec; runs standalone via bundled HTML, optional `storyboard-spec` accelerator |
-| **RESEARCH** | personas, segmentation, customer journey, market sizing (TAM/SAM/SOM), competitor analysis, sentiment |
+| **RESEARCH** | personas, segmentation, customer journey, market sizing (TAM/SAM/SOM), competitor analysis, sentiment - grounded in live, keyless market signal (voice of customer) |
 | **ANALYTICS** | NL->SQL, cohort analysis, A/B test read-out |
 | **GTM** | go-to-market, beachhead, ICP, growth loops, motions, battlecard |
 | **GROWTH** | marketing ideas, positioning, value-prop statements, naming, North Star metric |
@@ -79,7 +79,7 @@ Then in your agent CLI: `/superpm <your PM ask>`.
 
 ```
 SKILL.md      thin spine: principles, intent-capture table, the loop, reference map
-reference/    intent · critic · discover · strategy · execute · storyboard · research · analytics · gtm · growth · toolkit · ai-ship
+reference/    intent · critic · signal · discover · strategy · execute · storyboard · research · analytics · gtm · growth · toolkit · ai-ship
 templates/    PRD · strategy canvas · opportunity solution tree · battlecard · storyboard page/board
 docs/         DESIGN.md
 ```
@@ -90,6 +90,8 @@ docs/         DESIGN.md
   curated by Paweł Huryn - merged here into one skill.
 - Workflow + verification discipline adapted from **[cskwork/supergoal-skill](https://github.com/cskwork/supergoal-skill)** (MIT).
 - Screen-design storyboard method (optional accelerator) from **[cskwork/storyboard-spec](https://github.com/cskwork/storyboard-spec)** (MIT).
+- Live-signal method (optional `last30days` accelerator) from **[mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill)** (MIT).
+- Keyless read techniques (Jina Reader, RSS) from **[Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach)** (MIT).
 
 ## License
 
