@@ -1,0 +1,221 @@
+<!doctype html>
+<!-- ════════════════════════════════════════════════════════════════════
+     superpm · 스토리보드 화면설계서 — 한 화면(1 페이지) 자체완결 템플릿
+     외부 CSS/JS 의존 0. 그대로 브라우저에서 열면 아래 "로그인" 예시가 렌더됩니다.
+     한 화면(또는 한 상태)당 파일 하나. 파일명: sb-NN-<slug>.html (예: sb-01-login.html)
+
+     채우는 법:
+       1) <head>의 {{...}} 메타값 교체
+       2) 왼쪽 .sb-screen 안의 예시 와이어프레임을 실제 화면으로 교체
+          - Mode B(기획): wf-* 클래스로 와이어프레임을 그린다
+          - Mode A(문서화): 실제 앱 마크업을 붙이거나 <img class="sb-shot">로 스크린샷/Figma 이미지
+          - 주석 달 요소마다: 그 요소에 class="... sb-mark", 자식으로 <span class="sb-cue">N</span>
+            (오른쪽 위 모서리에 붙이려면 class="sb-cue r")
+       3) 오른쪽 표를 cue 번호와 1:1로 채운다 (No 순서 = 왼쪽 콜아웃 순서)
+     storyboard-spec 스킬이 설치돼 있으면 이 파일 대신 그쪽의 풍부한 렌더(테마 CSS·Figma·썸네일)로 위임.
+     ──────────────────────────────────────────────────────────────────── -->
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{SCREEN_ID}} {{TITLE}} · 스토리보드 화면설계서</title>
+<style>
+  :root{
+    --sb-primary:#2f6fed; --sb-primary-strong:#1b3b86; --sb-cue:#e5484d;
+    --sb-ink:#1d2330; --sb-mut:#6b7280; --sb-line:#e3e8f0; --sb-bg:#f5f7fb;
+    --sb-ev:#2f6fed; --sb-dt:#0a8f5b; --sb-ex:#e5484d; --sb-st:#8257e5;
+  }
+  *{box-sizing:border-box}
+  body.sb-body{margin:0;background:var(--sb-bg);color:var(--sb-ink);
+    font:15px/1.6 -apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
+  .sb-nav{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;
+    padding:10px 18px;background:#13203b;color:#cfe0f2}
+  .sb-nav .sb-back{color:#9fc1ef;text-decoration:none;font-weight:600}
+  .sb-nav .sb-nav-code{font-weight:700;color:#fff}
+  .sb-nav .sb-nav-title{color:#cfe0f2}
+  .sb-doc{max-width:1500px;margin:0 auto;padding:22px 22px 60px}
+  .sb-head h1{margin:.2em 0 .15em;font-size:26px}
+  .sb-eyebrow{margin:0;color:var(--sb-primary-strong);font-weight:700;
+    font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .sb-head>p{margin:.2em 0;color:var(--sb-mut)}
+  .sb-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin:14px 0 0;padding:0}
+  .sb-meta div{display:flex;gap:8px;align-items:baseline}
+  .sb-meta dt{margin:0;color:var(--sb-mut);font-size:12px}
+  .sb-meta dd{margin:0;font-weight:600}
+  .sb-split{display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:22px;
+    align-items:start;margin-top:20px}
+  .sb-pane{background:#fff;border:1px solid var(--sb-line);border-radius:14px;
+    box-shadow:0 1px 3px rgba(20,40,80,.05);overflow:hidden}
+  .sb-cap{padding:9px 16px;background:#eef3fb;border-bottom:1px solid var(--sb-line);
+    font-weight:700;font-size:13px;color:var(--sb-primary-strong)}
+  .sb-cap-en{color:var(--sb-mut);font-weight:500}
+  .sb-screen-sticky{position:sticky;top:60px}
+  .sb-screen{padding:22px}
+  .sb-shot{display:block;width:100%;height:auto;border:1px solid var(--sb-line);border-radius:8px}
+
+  /* 콜아웃 번호 ─ 마킹할 요소에 sb-mark, 그 자식으로 sb-cue */
+  .sb-mark{position:relative;outline:1.5px dashed rgba(47,111,237,.5);outline-offset:2px}
+  .sb-cue{position:absolute;z-index:5;top:-11px;left:-11px;min-width:21px;height:21px;
+    padding:0 5px;display:inline-flex;align-items:center;justify-content:center;
+    background:var(--sb-cue);color:#fff;border:2px solid #fff;border-radius:999px;
+    font-size:12px;font-weight:700;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+  .sb-cue.r{left:auto;right:-11px}
+
+  /* 우측 설명표 */
+  .sb-notes{width:100%;border-collapse:collapse;font-size:13.5px}
+  .sb-notes th,.sb-notes td{border-bottom:1px solid var(--sb-line);padding:9px 12px;
+    text-align:left;vertical-align:top}
+  .sb-notes thead th{background:#f7f9fd;color:var(--sb-mut);font-size:12px;font-weight:700}
+  .sb-notes .c-no{width:40px}.sb-notes .c-area{width:88px}.sb-notes .c-el{width:170px}
+  .sb-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+    background:var(--sb-cue);color:#fff;border-radius:999px;font-weight:700;font-size:12px}
+  .sb-el{display:block;font-weight:600}
+  .sb-id{display:block;color:var(--sb-mut);font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
+  .sb-notes td p{margin:0 0 6px}
+  .sb-notes .data{display:block;margin-top:3px;color:#374151}
+  .tag{display:inline-block;min-width:38px;margin-right:6px;padding:1px 7px;border-radius:6px;
+    color:#fff;font-size:11px;font-weight:700;text-align:center}
+  .tag.ev{background:var(--sb-ev)}.tag.dt{background:var(--sb-dt)}
+  .tag.ex{background:var(--sb-ex)}.tag.st{background:var(--sb-st)}
+
+  /* 와이어프레임 프리미티브 (Mode B) ─ 실제 앱 CSS 없이 저해상 화면을 그린다 */
+  .wf{display:flex;flex-direction:column;gap:14px;max-width:340px;margin:0 auto}
+  .wf-bar{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 12px;background:#eef1f6;border:1px solid var(--sb-line);border-radius:8px;
+    font-weight:700;color:#475569}
+  .wf-title{font-size:20px;font-weight:800;margin:2px 0}
+  .wf-sub{color:var(--sb-mut);font-size:13px}
+  .wf-field{display:flex;flex-direction:column;gap:5px}
+  .wf-field>span{font-size:12px;color:#475569;font-weight:600}
+  .wf-input{height:40px;border:1px solid #c6cede;border-radius:8px;background:#fbfcfe;
+    display:flex;align-items:center;padding:0 12px;color:#9aa3b2;font-size:13px}
+  .wf-btn{height:42px;border-radius:8px;border:1px solid #c6cede;background:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#475569}
+  .wf-btn.primary{background:var(--sb-primary);border-color:var(--sb-primary);color:#fff}
+  .wf-link{text-align:center;color:var(--sb-primary);font-size:13px;font-weight:600}
+  .wf-note{font-size:12px;color:#e5484d}
+
+  .sb-foot-note{margin-top:22px;padding:12px 16px;background:#fff;border:1px solid var(--sb-line);
+    border-radius:12px;font-size:13px;color:#374151}
+  .sb-foot{margin-top:14px;color:var(--sb-mut);font-size:12px}
+  @media(max-width:900px){.sb-split{grid-template-columns:1fr}.sb-screen-sticky{position:static}}
+</style>
+</head>
+<body class="sb-body">
+  <nav class="sb-nav">
+    <a class="sb-back" href="./index.html">← 보드로</a>
+    <span class="sb-nav-code">{{SCREEN_ID}}</span>
+    <span class="sb-nav-title">{{TITLE}}</span>
+  </nav>
+
+  <div class="sb-doc">
+    <header class="sb-head">
+      <p class="sb-eyebrow">스토리보드 화면설계서 · {{ST_NO}}</p>
+      <h1>{{TITLE}}</h1>
+      <p>{{ONE_LINE_PURPOSE}}</p>
+      <dl class="sb-meta">
+        <div><dt>화면 ID</dt><dd>{{SCREEN_ID}}</dd></div>
+        <div><dt>모드</dt><dd>{{MODE}}</dd></div>
+        <div><dt>상태</dt><dd>{{STATE}}</dd></div>
+        <div><dt>선행</dt><dd>{{PREV_SCREEN}}</dd></div>
+        <div><dt>후행</dt><dd>{{NEXT_SCREEN}}</dd></div>
+      </dl>
+    </header>
+
+    <div class="sb-split">
+      <!-- ╔═ 왼쪽: 화면 ════════════════════════════════════════════════╗
+           아래 예시 와이어프레임을 실제 화면으로 교체. (Mode A면 <img class="sb-shot"> 또는 실제 마크업)
+           ⚠ <table>/<tr> 직속 자식으로 <span class="sb-cue">를 넣지 말 것 → div.sb-mark로 감싸고 그 자식에 둘 것
+           ╚════════════════════════════════════════════════════════════╝ -->
+      <section class="sb-pane sb-screen-sticky">
+        <div class="sb-cap">화면 <span class="sb-cap-en">/ Screen</span></div>
+        <div class="sb-screen">
+          <!-- ▼▼▼ EXAMPLE(로그인) — 여기부터 교체 ▼▼▼ -->
+          <div class="wf">
+            <div class="wf-bar">서비스 로고</div>
+            <div class="wf-title">로그인</div>
+            <div class="wf-sub">계정으로 계속하기</div>
+
+            <label class="wf-field sb-mark">
+              <span class="sb-cue">1</span>
+              <span>이메일</span>
+              <span class="wf-input">name@example.com</span>
+            </label>
+
+            <label class="wf-field sb-mark">
+              <span class="sb-cue">2</span>
+              <span>비밀번호</span>
+              <span class="wf-input">••••••••</span>
+            </label>
+
+            <div class="wf-btn primary sb-mark">
+              <span class="sb-cue r">3</span>로그인
+            </div>
+
+            <div class="wf-link sb-mark"><span class="sb-cue">4</span>비밀번호 찾기</div>
+          </div>
+          <!-- ▲▲▲ EXAMPLE 끝 ▲▲▲ -->
+        </div>
+      </section>
+
+      <!-- ╔═ 오른쪽: 요소별 설명표 = 기능명세 ══════════════════════════╗
+           왼쪽 cue 번호와 1:1. tag: ev 이벤트 · dt 데이터 · ex 예외 · st 상태
+           ╚════════════════════════════════════════════════════════════╝ -->
+      <section class="sb-pane">
+        <div class="sb-cap">화면 설명 <span class="sb-cap-en">/ Description · 기능명세</span></div>
+        <table class="sb-notes">
+          <thead>
+            <tr><th class="c-no">No</th><th class="c-area">구역</th><th class="c-el">요소 / ID</th><th>설명 · 동작 · 데이터 · 예외</th></tr>
+          </thead>
+          <tbody>
+            <!-- 행 1개 = cue 1개. 아래 패턴을 cue 수만큼 반복 -->
+            <tr>
+              <td class="c-no"><span class="sb-num">1</span></td>
+              <td>폼</td>
+              <td><span class="sb-el">이메일 입력</span><span class="sb-id">#email</span></td>
+              <td>
+                <p>계정 이메일을 입력한다.</p>
+                <span class="data"><span class="tag dt">데이터</span> email:string · RFC 5322 형식 검증</span>
+                <span class="data"><span class="tag ex">예외</span> 형식 불일치 시 "올바른 이메일을 입력하세요"</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="c-no"><span class="sb-num">2</span></td>
+              <td>폼</td>
+              <td><span class="sb-el">비밀번호 입력</span><span class="sb-id">#password</span></td>
+              <td>
+                <p>비밀번호를 입력한다. 기본 마스킹.</p>
+                <span class="data"><span class="tag dt">데이터</span> password:string · 최소 8자</span>
+                <span class="data"><span class="tag ex">예외</span> 8자 미만이면 제출 버튼 비활성</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="c-no"><span class="sb-num">3</span></td>
+              <td>폼</td>
+              <td><span class="sb-el">로그인 버튼</span><span class="sb-id">#submit</span></td>
+              <td>
+                <p>자격증명을 검증하고 세션을 생성한다.</p>
+                <span class="data"><span class="tag ev">이벤트</span> click → POST /sessions {email, password}</span>
+                <span class="data"><span class="tag st">상태</span> 두 필드 유효 시 활성 · 요청 중 로딩</span>
+                <span class="data"><span class="tag ex">예외</span> 401 → "이메일 또는 비밀번호가 올바르지 않습니다"</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="c-no"><span class="sb-num">4</span></td>
+              <td>폼</td>
+              <td><span class="sb-el">비밀번호 찾기</span><span class="sb-id">a[href="/reset"]</span></td>
+              <td>
+                <p>비밀번호 재설정 화면으로 이동한다.</p>
+                <span class="data"><span class="tag ev">이벤트</span> click → 화면 sb-03-reset</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <div class="sb-foot-note"><strong>관련 상세 명세:</strong> {{RELATED_LINKS}}</div>
+    <p class="sb-foot">스토리보드 화면설계서 {{ST_NO}} · {{TITLE}} (기준 {{SOURCE_REFERENCE}})</p>
+  </div>
+</body>
+</html>

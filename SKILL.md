@@ -1,6 +1,6 @@
 ---
 name: superpm
-description: Single-skill PM operating system. Capture intent from the request, diverge by PM domain into the right framework (discovery, strategy, execution, research, analytics, GTM, growth, toolkit, AI-shipping), produce the smallest useful artifact, and verify it with an independent critic before delivery. Use for "/superpm", "superpm", "write a PRD", "product strategy", "OKRs", "roadmap", "opportunity solution tree", "competitor analysis", "market sizing", "pricing", "personas", "cohort / A/B analysis", "GTM / launch plan", "positioning", "review my resume", or any product-management artifact.
+description: Single-skill PM operating system. Capture intent from the request, diverge by PM domain into the right framework (discovery, strategy, execution, screen design, research, analytics, GTM, growth, toolkit, AI-shipping), produce the smallest useful artifact, and verify it with an independent critic before delivery. Use for "/superpm", "superpm", "write a PRD", "product strategy", "OKRs", "roadmap", "opportunity solution tree", "화면설계서 / 기능명세", "competitor analysis", "market sizing", "pricing", "personas", "cohort / A/B analysis", "GTM / launch plan", "positioning", "review my resume", or any product-management artifact.
 ---
 
 # /superpm - one PM request, a verified artifact
@@ -37,6 +37,7 @@ spans domains, pick the primary deliverable and pull supporting frameworks from 
 | brainstorm ideas / risky assumptions / opportunity tree / prioritize features / customer interview / metrics | **DISCOVER** | `reference/discover.md` |
 | product strategy / vision / value proposition / lean or business model / monetization / pricing / SWOT / PESTLE / Porter / Ansoff | **STRATEGY** | `reference/strategy.md` |
 | PRD / OKRs / roadmap / sprint plan / retro / pre-mortem / user or job stories / stakeholder map / prioritization framework / red-team a plan | **EXECUTE** | `reference/execute.md` |
+| 화면설계서 / 기능명세 / 스토리보드 / screen design doc / screen spec / wireframe / UI spec | **STORYBOARD** | `reference/storyboard.md` |
 | personas / segments / customer journey / market sizing (TAM/SAM/SOM) / competitor analysis / sentiment | **RESEARCH** | `reference/research.md` |
 | SQL from a question / cohort analysis / A/B test read-out | **ANALYTICS** | `reference/analytics.md` |
 | go-to-market / beachhead / ICP / growth loops / GTM motion / battlecard | **GTM** | `reference/gtm.md` |
@@ -76,13 +77,14 @@ The domain decides *which frameworks load*. The loop below is the same for all o
 | `reference/discover.md` | DISCOVER: ideation, assumptions, OST, prioritization, interviews, metrics |
 | `reference/strategy.md` | STRATEGY: strategy canvas, vision, value prop, lean/business model, pricing, analysis frameworks |
 | `reference/execute.md` | EXECUTE: PRD, OKRs, roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization |
+| `reference/storyboard.md` | STORYBOARD: 화면설계서/기능명세 - derive screens, wireframe (Mode B) or replica (Mode A), per-element spec; standalone via bundled HTML, delegates to the `storyboard-spec` skill if present |
 | `reference/research.md` | RESEARCH: personas, segments, journey map, market sizing, competitor, sentiment |
 | `reference/analytics.md` | ANALYTICS: NL->SQL, cohort, A/B test |
 | `reference/gtm.md` | GTM: strategy, beachhead, ICP, growth loops, motions, battlecard |
 | `reference/growth.md` | GROWTH: marketing ideas, positioning, value-prop statements, naming, North Star |
 | `reference/toolkit.md` | TOOLKIT: resume, NDA, privacy policy, proofread |
 | `reference/ai-ship.md` | AI-SHIP: shipping artifacts, intended-vs-implemented |
-| `templates/` | Reusable artifact scaffolds (PRD, strategy canvas, OST, battlecard, ...) |
+| `templates/` | Reusable artifact scaffolds (PRD, strategy canvas, OST, battlecard, storyboard page/board, ...) |
 
 ## Output language
 

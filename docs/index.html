@@ -6,7 +6,7 @@
 <title>/superpm - one PM request, a verified artifact</title>
 <meta name="description" content="/superpm folds 68 PM skills into one: it captures intent from your request, diverges by PM domain into the right framework, produces the smallest useful artifact, and an independent critic checks it against the framework and the real decision before delivery. English and Korean." />
 <meta property="og:title" content="/superpm - one PM request, a verified artifact" />
-<meta property="og:description" content="One skill, nine PM domains. Capture intent, route by domain, draft the smallest useful artifact, verify with an independent critic. English and Korean." />
+<meta property="og:description" content="One skill, ten PM domains. Capture intent, route by domain, draft the smallest useful artifact, verify with an independent critic. English and Korean." />
 <meta property="og:type" content="website" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230b0d18'/%3E%3Cpath d='M14 46 V20 l10 16 10-16 V46' fill='none' stroke='%239d8bff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 <style>
@@ -596,6 +596,7 @@
   }
   .mode-card.strategy::after { background: var(--cyan); }
   .mode-card.execute::after { background: var(--amber); }
+  .mode-card.storyboard::after { background: var(--blue); }
   .mode-card.research::after { background: var(--violet); }
   .mode-card.analytics::after { background: var(--blue); }
   .mode-card.gtm::after { background: var(--pink); }
@@ -967,13 +968,13 @@
     <span>ground every claim in evidence</span>
     <span>surface hidden assumptions</span>
     <span>an independent critic before delivery</span>
-    <span>one skill, nine PM domains</span>
+    <span>one skill, ten PM domains</span>
     <span><b>smallest useful artifact</b></span>
     <span>serve the real decision</span>
     <span>ground every claim in evidence</span>
     <span>surface hidden assumptions</span>
     <span>an independent critic before delivery</span>
-    <span>one skill, nine PM domains</span>
+    <span>one skill, ten PM domains</span>
   </div>
 </div>
 
@@ -986,7 +987,7 @@
         <p class="lead ko">9개 플러그인에 흩어진 68개 PM 스킬을 병합했습니다. 스킬을 고르지 않습니다 - 요청만 말하면 워크플로가 라우팅합니다.</p>
       </div>
       <div class="metric-grid">
-        <div class="metric reveal"><strong>9</strong><span class="en">PM domains; the request picks the route.</span><span class="ko">개 PM 도메인. 요청이 라우트를 고릅니다.</span></div>
+        <div class="metric reveal"><strong>10</strong><span class="en">PM domains; the request picks the route.</span><span class="ko">개 PM 도메인. 요청이 라우트를 고릅니다.</span></div>
         <div class="metric reveal"><strong>68</strong><span class="en">frameworks compressed into one self-contained skill.</span><span class="ko">개 프레임워크를 자기완결 단일 스킬로 압축.</span></div>
         <div class="metric reveal"><strong>1</strong><span class="en">independent critic red-teams every artifact before delivery.</span><span class="ko">독립 critic이 전달 전 모든 산출물을 red-team.</span></div>
         <div class="metric reveal"><strong>&le;5</strong><span class="en">questions, asked only when the request is genuinely ambiguous.</span><span class="ko">요청이 진짜 모호할 때만, 최대 5개 질문.</span></div>
@@ -1026,7 +1027,7 @@
   <section id="domains">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2><span class="en">One command. Nine domains.</span><span class="ko">명령 하나. 아홉 도메인.</span></h2>
+        <h2><span class="en">One command. Ten domains.</span><span class="ko">명령 하나. 열 도메인.</span></h2>
         <p class="lead en">The request picks the domain; the domain decides which frameworks load. The loop is the same for all of them.</p>
         <p class="lead ko">요청이 도메인을 고르고, 도메인이 어떤 프레임워크를 불러올지 정합니다. 루프는 모두 동일합니다.</p>
       </div>
@@ -1051,6 +1052,13 @@
           <p class="en">Outcomes over output: PRDs, OKRs, roadmaps, stories, and a red-team pass.</p>
           <p class="ko">아웃풋보다 아웃컴: PRD, OKR, 로드맵, 스토리, red-team.</p>
           <div class="mode-pipe"><b>PRD</b> · OKRs · roadmap · stories · prioritization</div>
+        </article>
+        <article class="mode-card storyboard reveal">
+          <span class="mode-label">STORYBOARD</span>
+          <h3><span class="en">Spec every screen.</span><span class="ko">모든 화면을 설계서로.</span></h3>
+          <p class="en">화면설계서/기능명세: a wireframe or replica with numbered callouts, a per-element spec beside it. Standalone HTML; uses storyboard-spec if installed.</p>
+          <p class="ko">화면설계서/기능명세: 와이어프레임 또는 실제 화면 재현 + 번호 콜아웃, 옆에 요소별 명세. 단독 HTML, storyboard-spec 있으면 활용.</p>
+          <div class="mode-pipe"><b>화면설계서</b> · wireframe/replica · callouts · 기능명세</div>
         </article>
         <article class="mode-card research reveal">
           <span class="mode-label">RESEARCH</span>
@@ -1119,14 +1127,14 @@
     <div class="wrap vault">
       <div class="reveal">
         <h2><span class="en">Self-contained references. Load what the domain needs.</span><span class="ko">자기완결 reference. 도메인에 필요한 것만 불러옵니다.</span></h2>
-        <p class="lead en">The 68 upstream skills are compressed into 9 domain references - no runtime dependency. The SKILL.md spine routes the ask; only the matching reference and the two shared gates load.</p>
-        <p class="lead ko">68개 업스트림 스킬을 9개 도메인 reference로 압축했습니다 - 런타임 의존 없음. SKILL.md 스파인이 요청을 라우팅하고, 해당 reference와 공유 게이트 둘만 로드합니다.</p>
+        <p class="lead en">The 68 upstream skills are compressed into 9 domain references, plus a screen-design route - no runtime dependency. The SKILL.md spine routes the ask; only the matching reference and the two shared gates load.</p>
+        <p class="lead ko">68개 업스트림 스킬을 9개 도메인 reference로 압축하고, 화면설계 라우트를 더했습니다 - 런타임 의존 없음. SKILL.md 스파인이 요청을 라우팅하고, 해당 reference와 공유 게이트 둘만 로드합니다.</p>
         <div class="file-list">
           <div class="file-chip"><code>SKILL.md</code><span class="en">spine: principles, intent table, loop</span><span class="ko">스파인: 원칙, intent 테이블, 루프</span></div>
           <div class="file-chip"><code>reference/intent.md</code><span class="en">classify + &le;5Q interview gate</span><span class="ko">분류 + 최대 5문항 인터뷰 게이트</span></div>
           <div class="file-chip"><code>reference/critic.md</code><span class="en">independent red-team gate</span><span class="ko">독립 red-team 게이트</span></div>
-          <div class="file-chip"><code>reference/&lt;domain&gt;.md</code><span class="en">9 framework libraries</span><span class="ko">9개 프레임워크 라이브러리</span></div>
-          <div class="file-chip"><code>templates/</code><span class="en">PRD · canvas · OST · battlecard</span><span class="ko">PRD · 캔버스 · OST · 배틀카드</span></div>
+          <div class="file-chip"><code>reference/&lt;domain&gt;.md</code><span class="en">10 framework libraries</span><span class="ko">10개 프레임워크 라이브러리</span></div>
+          <div class="file-chip"><code>templates/</code><span class="en">PRD · canvas · OST · battlecard · storyboard</span><span class="ko">PRD · 캔버스 · OST · 배틀카드 · 스토리보드</span></div>
           <div class="file-chip"><code>docs/DESIGN.md</code><span class="en">the supergoal -&gt; superpm mapping</span><span class="ko">supergoal -&gt; superpm 매핑</span></div>
         </div>
       </div>
@@ -1145,8 +1153,8 @@ No invented numbers. Evidence or assumption.</pre>
     <div class="wrap">
       <div class="section-head reveal">
         <h2><span class="en">What the critic catches.</span><span class="ko">critic이 잡아내는 것.</span></h2>
-        <p class="lead en">The same gate, shaped by the domain. Three of the nine:</p>
-        <p class="lead ko">같은 게이트가 도메인에 맞춰 형태를 바꿉니다. 아홉 중 셋:</p>
+        <p class="lead en">The same gate, shaped by the domain. Three of the ten:</p>
+        <p class="lead ko">같은 게이트가 도메인에 맞춰 형태를 바꿉니다. 열 중 셋:</p>
       </div>
       <div class="proof-grid">
         <article class="proof-item reveal">
@@ -1193,7 +1201,7 @@ ln -s "$(pwd)/superpm-skill" &lt;your-agent-skills-dir&gt;/superpm
 <span class="c-cyan">/superpm</span> 인앱 추천 기능 PRD 써줘</pre>
       </div>
       <div class="install-card reveal">
-        <h2><span class="en">One skill.<br>Nine domains.<br>No marketplace.</span><span class="ko">스킬 하나.<br>도메인 아홉.<br>마켓플레이스 없음.</span></h2>
+        <h2><span class="en">One skill.<br>Ten domains.<br>No marketplace.</span><span class="ko">스킬 하나.<br>도메인 열.<br>마켓플레이스 없음.</span></h2>
         <p class="en">This repo is the skill. Clone it, link it, and hand one PM ask to `/superpm`.</p>
         <p class="ko">이 저장소가 곧 스킬입니다. 클론하고 연결한 뒤, `/superpm`에 PM 요청 하나를 맡기세요.</p>
         <div class="pill-row">

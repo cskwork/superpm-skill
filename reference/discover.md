@@ -10,8 +10,45 @@ Generate solution ideas from multiple lenses, then converge.
 - **Lenses:** jobs-to-be-done, current pain points, competitor gaps, adjacent workflows, tech
   enablers, business-model shifts. Existing product: also mine support tickets, churn reasons,
   feature requests. New product: also mine analogous markets and first-principles needs.
-- **Output:** 10-20 ideas, each as `<who> can now <do what> so that <outcome>`. Cluster by
-  theme; flag the 3 worth testing first and why.
+- **Divergent output:** 10-20 ideas, each as `<who> can now <do what> so that <outcome>`.
+  Cluster by theme; flag the 3 worth testing first and why. Use when the user wants a wide menu.
+
+### Idea-proposal format (default when the user wants a recommendation, not a long list)
+
+The house style for "what should we build / bet on" and every "another idea / different one"
+follow-up. Fewer, sharper, punchier bets the user can act on.
+
+**Batch rule.** 3 bets, each on a *distinct customer/model axis* - never three flavors of one
+idea. Open with a header naming this round's axis theme (e.g. "다른 아이디어 3개 (모델 전환형)").
+On "another / different one", jump to a genuinely new axis (new customer, new model), not a
+re-skin of the last round.
+
+**Per-idea skeleton** (letter them P/Q/R or A/B/C; mark the winner inline with ` <- 추천`):
+
+    X. <one-line concept> (<customer + model tag>) <- 추천
+    - 누가→무엇: <who> -> <what job> (JTBD, one line)
+    - 무료 미끼: the customer-attraction item (lead magnet) that pulls users in
+    - 수익화: one model (link strategy.md monetization-strategy)
+    - 차별화(복제난이도): why a competitor *or AI* cannot copy it, tied to the user's named
+      unfair advantage. "AI X + Y" with no moat is not differentiation - say so out loud.
+    - 왜 지금 (winner) / 주의 (runners-up): timing thesis for the pick; the two-sided caveat
+      (cannibalization, arming competitors, chicken-and-egg, regulation) for the rest.
+
+**Then:**
+- **Comparison table** across decision axes: revenue ceiling | fit to the user's strengths |
+  marketing/CAC burden | copy-difficulty (moat) | validation speed.
+- **One decisive pick** + a one-line *why* with a concrete, memorable frame (an analogy or a
+  sharp economic phrase - "곡괭이 파는 청바지", "인프라 지대" - beats a generic sentence). Do not
+  dodge with "it depends".
+- **Cheapest validation** for the pick, timeboxed: experiment, success threshold (a number),
+  decision rule (link `brainstorm-experiments`).
+- **Critic** (the skill's gate, `critic.md`): keep it compact when the per-idea 주의 already
+  carried the two-sided risks; always label market numbers/competitor claims as assumptions.
+- **Next move:** offer to narrow the chosen bet one level deeper.
+
+Voice: concrete and punchy over hedged and generic. Principle: *lucrative lives in distribution
+and moat, not the product* - lead each idea's free hook as the growth asset, and never present a
+market size or revenue figure as fact.
 
 ## brainstorm-experiments
 

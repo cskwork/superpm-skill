@@ -41,13 +41,14 @@ The same loop runs for every domain; only the framework that loads changes.
    unvalidated assumptions, dodged decisions - each emitted as a risk.
 5. **Deliver** - fold the risks back in and stop, reporting what was checked.
 
-## Domains (the 9 pm-skills plugins, now 9 routes)
+## Domains (9 pm-skills plugins + a screen-design route = 10)
 
 | Domain | Covers |
 |---|---|
 | **DISCOVER** | ideation, risky assumptions, opportunity solution tree, feature prioritization, customer interviews, metrics |
 | **STRATEGY** | strategy canvas, vision, value proposition, lean/business model, monetization, pricing, SWOT/PESTLE/Porter/Ansoff |
 | **EXECUTE** | PRD, OKRs, outcome roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization frameworks, red-team |
+| **STORYBOARD** | 화면설계서/기능명세 screen design docs - wireframe (plan-first) or replica/Figma, per-element spec; runs standalone via bundled HTML, optional `storyboard-spec` accelerator |
 | **RESEARCH** | personas, segmentation, customer journey, market sizing (TAM/SAM/SOM), competitor analysis, sentiment |
 | **ANALYTICS** | NL->SQL, cohort analysis, A/B test read-out |
 | **GTM** | go-to-market, beachhead, ICP, growth loops, motions, battlecard |
@@ -78,8 +79,8 @@ Then in your agent CLI: `/superpm <your PM ask>`.
 
 ```
 SKILL.md      thin spine: principles, intent-capture table, the loop, reference map
-reference/    intent · critic · discover · strategy · execute · research · analytics · gtm · growth · toolkit · ai-ship
-templates/    PRD · strategy canvas · opportunity solution tree · battlecard
+reference/    intent · critic · discover · strategy · execute · storyboard · research · analytics · gtm · growth · toolkit · ai-ship
+templates/    PRD · strategy canvas · opportunity solution tree · battlecard · storyboard page/board
 docs/         DESIGN.md
 ```
 
@@ -88,6 +89,7 @@ docs/         DESIGN.md
 - PM framework catalog: **[phuryn/pm-skills](https://github.com/phuryn/pm-skills)** (MIT),
   curated by Paweł Huryn - merged here into one skill.
 - Workflow + verification discipline adapted from **[cskwork/supergoal-skill](https://github.com/cskwork/supergoal-skill)** (MIT).
+- Screen-design storyboard method (optional accelerator) from **[cskwork/storyboard-spec](https://github.com/cskwork/storyboard-spec)** (MIT).
 
 ## License
 
