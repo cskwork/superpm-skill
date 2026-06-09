@@ -55,6 +55,7 @@ reference/
   discover.md     pm-product-discovery frameworks
   strategy.md     pm-product-strategy frameworks
   execute.md      pm-execution frameworks
+  storyboard.md   화면설계서/기능명세 storyboard - bundled-standalone, delegates to storyboard-spec if installed
   research.md     pm-market-research frameworks
   analytics.md    pm-data-analytics frameworks
   gtm.md          pm-go-to-market frameworks
@@ -62,6 +63,8 @@ reference/
   toolkit.md      pm-toolkit utilities
   ai-ship.md      pm-ai-shipping frameworks (ties back to supergoal's verification ethos)
 templates/        high-value artifact templates (PRD, strategy canvas, OST, battlecard, ...)
+  storyboard-page.html   self-contained one-screen 화면설계서 page (inline CSS, no deps)
+  storyboard-board.html  self-contained thumbnail/index board (live iframe thumbs)
 docs/DESIGN.md    this file
 ```
 
@@ -71,7 +74,29 @@ The 68 upstream skills are compressed into the 9 domain references at a usable d
 runtime dependency on `phuryn/pm-skills`. References name the canonical framework so a reader
 can go deeper upstream if wanted, but `superpm` runs standalone.
 
+## STORYBOARD domain: bridge to storyboard-spec, standalone by default
+
+The STORYBOARD domain produces 화면설계서/기능명세 (screen design documents): per the
+self-containment principle above, superpm renders the full document with **zero external
+dependency**, using two bundled self-contained HTML templates (`templates/storyboard-page.html`,
+`templates/storyboard-board.html`) - inline CSS/JS only, opens straight in a browser.
+
+`cskwork/storyboard-spec` is a separate, richer skill for the same artifact (Figma REST
+auto-extraction, headless-Chrome thumbnails, themeable CSS). It is treated as an **optional
+accelerator, never a hard dependency**: `reference/storyboard.md` detects it
+(`~/.claude/skills/storyboard-spec/SKILL.md`) and, only if present, delegates the heavy rendering
+to it. The bundled templates use the same `{{...}}` / `sb-mark` / `sb-cue` / `sb-notes` contract
+as storyboard-spec, so a document started standalone upgrades cleanly if that skill is later
+installed.
+
+The artifact also folds 기능명세 into the same deliverable: the right-pane per-element table
+(action / data / exception / state) *is* the functional spec - one document, not two. The critic
+gate extends to screens via `reference/storyboard.md`'s completeness anchors (no dead-end screens,
+1:1 callout-to-row, sourced data contracts, non-happy states covered).
+
 ## Credit
 
 - PM framework catalog: `phuryn/pm-skills` (MIT), curated by Pawel Huryn.
 - Workflow + verification discipline: `cskwork/supergoal-skill` (MIT).
+- Screen-design storyboard method (optional accelerator + bundled-template contract):
+  `cskwork/storyboard-spec` (MIT).
