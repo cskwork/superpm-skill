@@ -52,6 +52,7 @@ SKILL.md          thin spine: principles, intent-capture table, the loop, refere
 reference/
   intent.md       intent classification + <=5 question interview gate
   critic.md       independent critic / red-team verification gate
+  signal.md       live market & customer signal (voice of customer) - keyless, read-only; delegates to last30days if installed
   discover.md     pm-product-discovery frameworks
   strategy.md     pm-product-strategy frameworks
   execute.md      pm-execution frameworks
@@ -94,9 +95,22 @@ The artifact also folds 기능명세 into the same deliverable: the right-pane p
 gate extends to screens via `reference/storyboard.md`'s completeness anchors (no dead-end screens,
 1:1 callout-to-row, sourced data contracts, non-happy states covered).
 
+## SIGNAL: live market evidence, keyless + standalone
+
+`reference/signal.md` is a **cross-cutting evidence source** (like intent/critic), not a domain -
+no count change. It grounds market/customer claims in real, recent, engagement-ranked signal so
+RESEARCH/DISCOVER/GTM cite evidence instead of asserting it. Same pattern as STORYBOARD: runs
+standalone on superpm's own `WebSearch`/`WebFetch` over **keyless, read-only** public sources
+(HN, GitHub, Polymarket, Jina Reader, web search, RSS; Reddit's anonymous API is now blocked, so
+its content is reached keyless via web search), and delegates to the `last30days` skill
+(`~/.claude/skills/last30days/SKILL.md`) for deeper keyed sources only if installed. Hard boundary:
+read-only, no keys, no posting or outreach.
+
 ## Credit
 
 - PM framework catalog: `phuryn/pm-skills` (MIT), curated by Pawel Huryn.
 - Workflow + verification discipline: `cskwork/supergoal-skill` (MIT).
 - Screen-design storyboard method (optional accelerator + bundled-template contract):
   `cskwork/storyboard-spec` (MIT).
+- Live-signal method (optional `last30days` accelerator): `mvanhorn/last30days-skill` (MIT).
+- Keyless read techniques (Jina Reader, RSS): `Panniantong/Agent-Reach` (MIT).

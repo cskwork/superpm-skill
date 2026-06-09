@@ -1,3 +1,80 @@
+# 2026-06-09 — SIGNAL: live market & customer signal (keyless, read-only) cross-cutting layer
+
+## What changed
+
+Added **SIGNAL**, a cross-cutting evidence source (like `intent.md` / `critic.md`, not a domain)
+that grounds market/customer claims in real, recent, engagement-ranked signal — so RESEARCH,
+DISCOVER, and GTM cite evidence instead of asserting it. An essential PM reads what people
+actually say, do, and pay for; this is the mechanism for it.
+
+New:
+- `reference/signal.md` — the layer. Method (parse → resolve where → search ~30d → score by
+  engagement → pull real voice → cluster → cited brief), keyless source list (Reddit public JSON,
+  Hacker News, GitHub, Polymarket, Jina Reader `r.jina.ai`, public RSS, WebSearch/WebFetch), a
+  hard safety boundary, the optional `last30days` delegation block, the framework bridge, and
+  critic completeness anchors.
+
+Edited (surgical, 1–3 lines each):
+- `SKILL.md` — "Ground claims in evidence" principle now points to signal.md; a cross-cutting note
+  under the intent table; a `reference/signal.md` row in the reference map; signal triggers in the
+  frontmatter `description`.
+- `reference/research.md` — `live-market-signal` section + a sentiment-analysis pointer + a critic anchor.
+- `reference/discover.md` — signal hooks on `brainstorm-ideas` lenses and `opportunity-solution-tree`.
+- `reference/gtm.md` — signal grounding on `ideal-customer-profile` and `competitive-battlecard`.
+- `docs/DESIGN.md` — layout line, a "SIGNAL: live market evidence" section, two credits.
+- `README.md`, `README.ko.md` — RESEARCH row note, layout reference line, two credits.
+- `docs/index.html` — RESEARCH mode-card copy, a `reference/signal.md` file-chip, footer credit.
+  **Counts untouched** (signal is not a domain): "9 plugins / 10 domains / 68 frameworks" intact.
+
+## Decisions and why
+
+- **Cross-cutting evidence source, not a new domain.** signal feeds RESEARCH/DISCOVER/GTM; it is
+  an input, not a deliverable. Modeled on `intent.md`/`critic.md`. This keeps the routing table
+  clean and avoids a dishonest domain-count bump across README/landing.
+- **Bundle the method, delegate the engine (storyboard precedent).** superpm runs the signal brief
+  standalone on its own `WebSearch`/`WebFetch`; if the `last30days` skill is installed it delegates
+  the deeper keyed work (detected at `~/.claude/skills/last30days/SKILL.md`). Vendoring last30days'
+  Python engine + API keys + test suite was rejected as heavy duplication that would drift — same
+  reasoning that kept storyboard-spec an optional accelerator.
+- **superpm functions independently (user requirement).** No hard dependency: absent last30days,
+  the keyless bundle still produces real, sourced signal.
+- **Keyless by default (user requirement).** The bundle uses only zero-config public sources
+  (Reddit/HN/GitHub/Polymarket/Jina Reader/RSS). Key/cookie sources (X, YouTube transcripts, etc.)
+  live only behind the user's own installed `last30days` accelerator — superpm never asks for keys.
+- **Agent-Reach: safe keyless read techniques only.** Adopted Jina Reader (`r.jina.ai`) and public
+  RSS read patterns. Rejected its posting/outreach (tweet/comment/like = outward + contacts real
+  accounts), cookie-based scraping (account-ban risk per its own README), and toolchain install —
+  failed the "if possible and safe" gate. signal.md states a hard read-only / no-outreach boundary
+  consistent with superpm's "irreversible/outward step needs explicit consent" principle.
+- **Kept terse for agent reading (user steer).** signal.md and the hooks are procedure-first,
+  prose-minimal; rationale lives here, not in the skill body.
+
+## Verification
+
+- Reference integrity: `grep` confirms `signal.md` is referenced from `SKILL.md`,
+  `reference/research.md`, `reference/discover.md`, `reference/gtm.md`, `docs/DESIGN.md`, both
+  READMEs, and `docs/index.html`; no broken links.
+- Honesty check: the "9 / 10 / 68" count copy in `docs/index.html` and the READMEs is unchanged
+  (signal is cross-cutting, not a domain). `last30days` (mvanhorn) and `Agent-Reach` (Panniantong)
+  both credited MIT in DESIGN, both READMEs, and the landing footer.
+- Critic self-review of `reference/signal.md` against `reference/critic.md`: completeness (method +
+  sources + safety + delegate + bridge + anchors), evidence (every cited path exists), decision-fit
+  (drives evidence-grounding for market/customer claims), assumption-surface (keyless/read-only and
+  delegate-vs-bundle logic explicit). No blockers.
+- **Live source test (curl + WebSearch, 2026-06-09).** Confirmed keyless-direct: Hacker News
+  Algolia (JSON, points/comments), GitHub search API (stars, 60/hr unauth), Polymarket gamma
+  (live odds), Jina Reader `r.jina.ai` (any non-blocked page -> markdown), generic public RSS
+  (hnrss, Verge). **Correction applied:** Reddit's anonymous access is now fully gated -
+  `www`/`old` `.json`, `.rss`, and Jina-on-reddit all return 403 / a "log in or use developer
+  token" block, so the original "Reddit public JSON, keyless" claim was wrong. `signal.md`,
+  `research.md`, and `DESIGN.md` were corrected: Reddit's consumer voice is reached keyless via
+  `WebSearch "site:reddit.com <topic>"` (search-indexed threads + upvote-weighted sentiment), and
+  full thread/comment depth via the `last30days` accelerator on the user's own access. End-to-end
+  dry run (topic "Claude Code") produced a cited, engagement-ranked brief from HN + web-surfaced
+  Reddit + GitHub signals.
+
+---
+
 # 2026-06-09 — STORYBOARD domain: 화면설계서/기능명세 via bridge to storyboard-spec
 
 ## What changed
