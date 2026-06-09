@@ -55,12 +55,22 @@ element with no row is a gap; a row with no left-side marker is an orphan - both
 
 ## Storyboard structure
 
+- **화면 목차 (TOC, left rail)** - a sticky sidebar on every screen page listing **all** screens,
+  grouped, so a reader jumps screen-to-screen without returning to the board. The current screen
+  is highlighted (`a.t.current`); planned-but-undrawn screens are shown dimmed and unlinked
+  (`span.t.plan`). This is on by default in the bundled template. The block is **identical on every
+  page** - only which entry is `current` changes.
 - **Left pane** - the screen: Mode B wireframe or Mode A replica/image. Each annotated element
   carries a numbered marker (red circle, white border, centered number).
 - **Right pane** - the 5-column table above (No / 구역 / 요소·ID / 설명·동작·데이터·예외), one row
   per marker, in callout order.
 - **Board (index)** - a thumbnail grid linking every screen page, so a reader sees the whole set
-  and clicks into any screen.
+  and clicks into any screen. (The board is the visual overview; the TOC is the per-page text jump.)
+- **Viewer controls (on by default)** - each page ships a top bar + screen caption with: 글자 크기
+  (font-size A-/A/A+, persisted), 콜아웃 번호 진하기 (callout opacity slider), 화면 확대/축소
+  (wheel + ＋/－/맞춤 + drag-pan + double-click reset on the `.sb-zoom`/`.sb-stage`), 원본 보기
+  (full-screen lightbox that clones the screen stage), and 이전/다음 pager. These work in both
+  modes (the zoom/lightbox operate on the `.sb-stage`, whether it holds a wireframe or an `<img>`).
 
 ## Production - delegate if storyboard-spec is present, else bundle (standalone)
 
@@ -76,8 +86,9 @@ superpm produces the full 화면설계서 with **no external dependency**. If th
 3. **If absent -> bundle (the default).** Build the document from superpm's self-contained
    templates - zero external CSS/JS, opens straight in a browser:
    - `templates/storyboard-page.html` - copy once per screen; fill the `{{...}}` and replace the
-     example wireframe; name it `sb-NN-<slug>.html`. Left = wireframe/replica markup with
-     `sb-mark` + `sb-cue` markers; right = the `sb-notes` table.
+     example wireframe; name it `sb-NN-<slug>.html`. Includes the 화면 목차 (TOC) rail by default -
+     paste the same screen list into every page, flipping only `current`. Left = wireframe/replica
+     markup with `sb-mark` + `sb-cue` markers; right = the `sb-notes` table.
    - `templates/storyboard-board.html` - the thumbnail/index board linking every page (live
      `<iframe>` thumbnails, so no screenshot step is needed).
 
@@ -90,5 +101,6 @@ the rendering polish differs.
 Every screen has a prev/next (no dead ends); every interactive element has a callout row with at
 least an event and an exception; left markers and right rows are 1:1 (no orphans either way); every
 data contract is sourced or labeled an assumption; non-happy states (empty / error / loading /
-permission) each get a page or a row; the mode (A/B) is stated per screen. A storyboard that
-documents only the happy path is incomplete.
+permission) each get a page or a row; the mode (A/B) is stated per screen; every page carries the
+same 화면 목차 (TOC) with the current screen marked. A storyboard that documents only the happy
+path is incomplete.
