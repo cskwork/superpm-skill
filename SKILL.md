@@ -1,6 +1,6 @@
 ---
 name: superpm
-description: Single-skill PM operating system. Capture intent from the request, diverge by PM domain into the right framework (discovery, strategy, execution, screen design, research, analytics, GTM, growth, toolkit, AI-shipping), produce the smallest useful artifact, and verify it with an independent critic before delivery. Use for "/superpm", "superpm", "write a PRD", "product strategy", "OKRs", "roadmap", "opportunity solution tree", "화면설계서 / 기능명세", "competitor analysis", "market sizing", "pricing", "personas", "cohort / A/B analysis", "GTM / launch plan", "positioning", "review my resume", or any product-management artifact.
+description: Single-skill PM operating system. Capture intent from the request, diverge by PM domain into the right framework (discovery, strategy, execution, screen design, research, analytics, GTM, growth, toolkit, AI-shipping), produce the smallest useful artifact, and verify it with an independent critic before delivery. Use for "/superpm", "superpm", "write a PRD", "product strategy", "OKRs", "roadmap", "opportunity solution tree", "화면설계서 / 기능명세", "competitor analysis", "market sizing", "pricing", "personas", "cohort / A/B analysis", "GTM / launch plan", "positioning", "review my resume", "what are people saying", "market signal / voice of customer / trends", or any product-management artifact.
 ---
 
 # /superpm - one PM request, a verified artifact
@@ -19,7 +19,8 @@ write directly, skip the skill and write it.
 - **Smallest useful artifact.** Apply only the frameworks the decision needs. Do not bolt on a
   SWOT, a persona, and a roadmap when the ask was one pricing call.
 - **Ground claims in evidence.** Numbers, quotes, and segments come from the user's data, docs,
-  or named assumptions - never invented. Mark every assumption as an assumption.
+  or named assumptions - never invented. For market and customer claims, pull real, recent signal
+  via `reference/signal.md` (read-only, keyless) before asserting. Mark every assumption as an assumption.
 - **Surface hidden assumptions first.** The one place a process beats a plain draft: an
   independent critic names the unstated assumptions and missing pieces as risks.
 - **Ask only when genuinely ambiguous.** Resolve anything answerable from the repo, attached
@@ -46,6 +47,10 @@ spans domains, pick the primary deliverable and pull supporting frameworks from 
 | document an AI-built app / shipping artifacts / intended-vs-implemented gap | **AI-SHIP** | `reference/ai-ship.md` |
 
 The domain decides *which frameworks load*. The loop below is the same for all of them.
+
+Cross-cutting: requests about *what the market/customers want* ("what are people saying about X",
+demand, trends, voice of customer) ground their RESEARCH/DISCOVER/GTM artifact in `reference/signal.md`
+(live, read-only, keyless) first.
 
 ## The loop - Capture, Frame, Draft, Critic, Deliver
 
@@ -74,6 +79,7 @@ The domain decides *which frameworks load*. The loop below is the same for all o
 |---|---|
 | `reference/intent.md` | Capture: ambiguity-gated <=5 question interview before drafting |
 | `reference/critic.md` | Critic: independent red-team verification gate (every domain) |
+| `reference/signal.md` | Signal: live market & customer evidence (voice of customer), read-only + keyless; feeds RESEARCH/DISCOVER/GTM, delegates to the `last30days` skill if present |
 | `reference/discover.md` | DISCOVER: ideation, assumptions, OST, prioritization, interviews, metrics |
 | `reference/strategy.md` | STRATEGY: strategy canvas, vision, value prop, lean/business model, pricing, analysis frameworks |
 | `reference/execute.md` | EXECUTE: PRD, OKRs, roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization |
