@@ -10,6 +10,7 @@ your request, **diverges by PM domain** into the right framework, produces the s
 artifact, and runs an independent critic over it before delivery - then stops.
 
 No extra install: clone the repo, symlink it into your skills directory, then `/superpm <ask>`.
+Landing page: **[cskwork.github.io/superpm-skill](https://cskwork.github.io/superpm-skill/)**.
 
 ## What it is
 
