@@ -101,3 +101,79 @@ The new format encodes a reproducible house style:
 
 - Edit applied to `reference/discover.md`; `brainstorm-experiments` and other sections untouched.
 - Format derived from an in-session sample the user confirmed; no runtime/scripted component to test.
+
+---
+
+# 2026-06-09 — STORYBOARD: 화면 목차 (TOC) rail on by default
+
+## What changed
+
+Storyboard pages now carry a left **화면 목차 (TOC)** rail by default — a sticky sidebar listing
+all screens (grouped), with the current screen highlighted and planned screens dimmed, so a reader
+jumps screen-to-screen without returning to the board. Modeled on the ExamBank storyboard
+(`.sb-toc` / `.sb-layout`).
+
+- `templates/storyboard-page.html` — restructured to `nav → .sb-layout(aside.sb-toc + main.sb-main)`;
+  added TOC CSS, example TOC entries (`a.t.current` + dimmed `span.t.plan`), and a scroll-to-current
+  script. Single-file, still zero external deps.
+- `reference/storyboard.md` — TOC added to "Storyboard structure", the bundled production note, and
+  the critic completeness anchors ("every page carries the same 화면 목차 with the current screen marked").
+- `examples/donga-content-api/` — applied the TOC to `storyboard.css` + `sb-01`/`sb-02` to demo it.
+
+## Decisions and why
+
+- **TOC vs board are complementary, both kept.** Board (`index.html`) = visual thumbnail overview;
+  TOC = per-page text quick-jump. The user pointed at ExamBank, which has both; the TOC was the
+  missing piece, so it became the page default.
+- **Same TOC block on every page; only `current` moves.** Matches the ExamBank convention and keeps
+  the rail a stable, predictable index. Documented as a completeness anchor.
+- **Planned screens shown dimmed/unlinked (`span.t.plan`).** Lets a draft list the full intended set
+  in the TOC without 404s to pages that aren't built yet.
+
+## Verification
+
+- Rendered the bundled `templates/storyboard-page.html` and `examples/.../sb-01-benchmark.html` in
+  headless Chrome: left "화면 목차" rail shows grouped entries with the current screen highlighted and
+  planned screens dimmed; main content (header + screen/spec split) renders beside it. Still no
+  external requests.
+
+---
+
+# 2026-06-09 — STORYBOARD: viewer controls (font size · zoom · view-original · opacity · pager)
+
+## What changed
+
+Ported the ExamBank/storyboard-spec viewer controls into superpm's bundled storyboard page so they
+are on by default:
+- **글자 크기** (A-/A/A+ → `--sb-fz`, scales the spec table text; localStorage, cross-tab sync)
+- **콜아웃 번호 진하기** (opacity slider → `--sb-cue-op`)
+- **화면 확대/축소** (`.sb-zoom`/`.sb-stage`: wheel-zoom at cursor, ＋/－/맞춤 buttons, drag-pan,
+  double-click reset)
+- **원본 보기** (full-screen lightbox)
+- **이전/다음 pager**
+
+Files:
+- `templates/storyboard-page.html` — added the control bar (nav), zoom controls + 원본 보기 (screen
+  caption), wrapped the screen in `.sb-zoom > .sb-stage`, added the lightbox markup, and inlined
+  three scripts (settings / zoom / lightbox). Still a single self-contained file, zero external deps.
+- `reference/storyboard.md` — "Viewer controls (on by default)" bullet in Storyboard structure.
+- `examples/donga-content-api/` — same controls via shared `storyboard.css` + new `storyboard.js`,
+  applied to `sb-01`/`sb-02`.
+
+## Decisions and why
+
+- **Lightbox clones the `.sb-stage` (mode-agnostic).** storyboard-spec's lightbox opens an image
+  (Mode A only). To make 원본 보기 work for Mode B wireframes too, the bundled lightbox clones the
+  screen stage DOM and fits it to the viewport — so it works whether the stage holds a wireframe or
+  an `<img class="sb-screen-img">`.
+- **Controls default ON.** The user wants ExamBank parity; the controls degrade gracefully (no image
+  needed) and add no external dependency.
+- **`--sb-cue-op` default 100 (solid).** ExamBank defaults the slider lower for dense screenshots;
+  for wireframes the callouts should read solid by default.
+
+## Verification
+
+- Headless-Chrome functional test on `examples/.../sb-01-benchmark.html` (programmatic clicks):
+  `fz=1.12` (font + worked), `op=0.40` (opacity slider worked), `zoom=ok` (screen got a scale
+  transform), `lb=open` + `clone=ok` (원본 보기 opened the lightbox with the cloned stage).
+- No JS console errors on load (`--enable-logging` grep for uncaught/SEVERE → empty).
