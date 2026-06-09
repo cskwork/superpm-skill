@@ -9,6 +9,12 @@ This is the superpm analog of supergoal's independent critic: there it writes a 
 for each uncovered requirement; here it names each missing piece and unsupported claim as a
 **risk**. Do not let the drafter grade its own work to green.
 
+## Independence - make it mechanical
+
+If the harness supports subagents, run the critic as one: pass it only the `## Intent` block
+and the draft - no chat history, no drafting notes - and take back its risk list. Without
+subagents, switch stance in-context and re-read the draft top to bottom before judging.
+
 ## Stance
 
 Read the draft cold. Assume it is wrong until the evidence shows otherwise. Your job is to find
@@ -53,6 +59,9 @@ Return a short risk list, not a rewrite:
 - [Gap] Persona "busy admin" has no evidence; mark as hypothesis to test in 3 interviews.
 - [Polish] Roadmap mixes outcomes and features; split so each row is one outcome.
 ```
+
+All blockers, always; cap the whole list at ~7 by dropping the weakest polish items first - a
+20-item list buries the blocker.
 
 The drafter then folds blockers and gaps back in (or, for gaps the user must own, leaves them
 listed). Re-run the four checks only on what changed. Stop when no blockers remain and report

@@ -33,17 +33,26 @@ artifact; the loop is universal:
 Capture -> Frame -> Draft -> Critic -> Deliver
 ```
 
-1. **Capture** - classify the PM ask into a domain + a target artifact. If genuinely
-   ambiguous, run `reference/intent.md` (<=5 questions); resolve doc/code-answerable
-   questions by reading, not asking.
-2. **Frame** - state in one line the real decision this artifact must serve and its
-   completion bar.
+1. **Capture** - classify the PM ask and always record the `Domain | Artifact | Decision`
+   line. If genuinely ambiguous, run `reference/intent.md` (<=5 questions, one batched round,
+   a recommended answer per question); resolve doc/code-answerable questions by reading, not
+   asking.
+2. **Frame** - extend that line into the artifact's `## Intent` block: the real decision plus
+   the completion bar. That block is the contract the critic checks against.
 3. **Draft** - apply the domain framework from `reference/<domain>.md`. Smallest useful
    artifact; no filler frameworks bolted on.
-4. **Critic (independent)** - run `reference/critic.md`: red-team for missing sections,
-   unsupported claims, and unvalidated assumptions; emit them as risks.
-5. **Deliver** - fold the surfaced risks back in, then stop. Report what was checked.
+4. **Critic (independent)** - run `reference/critic.md`. Independence is mechanical: a fresh
+   subagent given only the Intent block + draft where the harness supports it, a cold
+   stance-switch otherwise. Red-team for missing sections, unsupported claims, and unvalidated
+   assumptions; emit them as risks (all blockers, list capped at ~7).
+5. **Deliver** - fold the surfaced risks back in, then stop. Response shape: artifact ->
+   remaining risks -> what was checked -> the one natural next artifact in the chain (offered,
+   not started). Inline by default; files when multi-page (storyboard always).
    Any irreversible/outward step (publish, send, post to a tracker) needs explicit consent.
+
+Follow-up turns re-enter the loop at the right depth: substantive edits re-run the critic on
+the delta only, format/tone-only edits skip it, and a new artifact or domain restarts at
+Capture. The loop is per-artifact, not per-message.
 
 ## Layout
 

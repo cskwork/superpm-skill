@@ -4,6 +4,7 @@
 
 ## Intent
 - Domain: EXECUTE | Artifact: PRD | Decision it serves: <ship/no-ship? scope cut? alignment?>
+- Done bar: <what "done and trustworthy" looks like - the critic checks against this>
 
 ## 1. Problem & context
 <Who has the problem, what the pain is, the evidence (data/quotes/tickets) it is real.>

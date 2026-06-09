@@ -1,6 +1,6 @@
 ---
 name: superpm
-description: Single-skill PM operating system. Capture intent from the request, diverge by PM domain into the right framework (discovery, strategy, execution, screen design, research, analytics, GTM, growth, toolkit, AI-shipping), produce the smallest useful artifact, and verify it with an independent critic before delivery. Use for "/superpm", "superpm", "write a PRD", "product strategy", "OKRs", "roadmap", "opportunity solution tree", "화면설계서 / 기능명세", "competitor analysis", "market sizing", "pricing", "personas", "cohort / A/B analysis", "GTM / launch plan", "positioning", "review my resume", "what are people saying", "market signal / voice of customer / trends", or any product-management artifact.
+description: PM operating system - route a PM ask to its domain framework (discovery, strategy, execution, screen design, research, analytics, GTM, growth, toolkit, AI-shipping), draft the smallest useful artifact, verify with an independent critic. Use for "/superpm", "superpm", "write a PRD", "product strategy", "OKRs", "roadmap", "opportunity solution tree", "user stories", "pre-mortem", "retro", "release notes", "interview script", "화면설계서 / 기능명세", "competitor analysis", "market sizing", "pricing", "personas", "cohort / A/B analysis", "GTM / launch plan", "ICP", "battlecard", "positioning", "North Star metric", "review my resume", "what are people saying", "market signal / voice of customer / trends", or any product-management artifact.
 ---
 
 # /superpm - one PM request, a verified artifact
@@ -8,25 +8,24 @@ description: Single-skill PM operating system. Capture intent from the request, 
 One PM ask -> capture intent -> diverge by domain -> the smallest useful artifact -> an
 independent critic checks it against the framework and the real decision -> stop.
 
-The catalog of 68 PM frameworks lives in `reference/`. This file is the spine: it classifies
-the ask, names the loop, and points at the right reference. For a one-paragraph note you could
-write directly, skip the skill and write it.
+68 PM frameworks live in `reference/`; this file routes the ask and names the loop. For a
+one-paragraph note you could write directly, skip the skill.
 
 ## Principles
 
-- **Serve the real decision.** Every artifact answers a decision someone will act on. Name that
-  decision before drafting. A framework filled in for its own sake is waste.
-- **Smallest useful artifact.** Apply only the frameworks the decision needs. Do not bolt on a
-  SWOT, a persona, and a roadmap when the ask was one pricing call.
-- **Ground claims in evidence.** Numbers, quotes, and segments come from the user's data, docs,
-  or named assumptions - never invented. For market and customer claims, pull real, recent signal
-  via `reference/signal.md` (read-only, keyless) before asserting. Mark every assumption as an assumption.
-- **Surface hidden assumptions first.** The one place a process beats a plain draft: an
-  independent critic names the unstated assumptions and missing pieces as risks.
-- **Ask only when genuinely ambiguous.** Resolve anything answerable from the repo, attached
-  docs, or data by reading it. Interview only load-bearing, user-only choices (`reference/intent.md`).
-- **Hard stops.** Anything irreversible or outward-facing - publishing, sending, posting to a
-  tracker, sharing externally - needs explicit consent. Never present an assumption as a fact.
+- **Serve the real decision.** Name the decision the artifact drives before drafting; a
+  framework filled in for its own sake is waste.
+- **Smallest useful artifact.** Only the frameworks the decision needs - no bolted-on
+  SWOT/persona/roadmap when the ask was one pricing call.
+- **Ground claims in evidence.** Numbers, quotes, segments come from the user's data, docs, or
+  named assumptions - never invented. Market/customer claims: pull real signal via
+  `reference/signal.md` (read-only, keyless) before asserting.
+- **Surface hidden assumptions.** The critic names unstated assumptions and missing pieces as
+  risks - never present an assumption as fact.
+- **Ask only when genuinely ambiguous.** Read the repo/docs/data first; interview only
+  load-bearing, user-only choices (`reference/intent.md`).
+- **Hard stops.** Irreversible or outward-facing actions (publish, send, post, share
+  externally) need explicit consent.
 
 ## Intent capture - signal to domain
 
@@ -46,32 +45,47 @@ spans domains, pick the primary deliverable and pull supporting frameworks from 
 | review or tailor a resume / draft an NDA or privacy policy / proofread | **TOOLKIT** | `reference/toolkit.md` |
 | document an AI-built app / shipping artifacts / intended-vs-implemented gap | **AI-SHIP** | `reference/ai-ship.md` |
 
-The domain decides *which frameworks load*. The loop below is the same for all of them.
-
-Cross-cutting: requests about *what the market/customers want* ("what are people saying about X",
-demand, trends, voice of customer) ground their RESEARCH/DISCOVER/GTM artifact in `reference/signal.md`
-(live, read-only, keyless) first.
+The domain decides which reference loads; the loop is the same for all. Cross-cutting: asks
+about *what the market/customers want* (demand, trends, voice of customer) ground the artifact
+in `reference/signal.md` first.
 
 ## The loop - Capture, Frame, Draft, Critic, Deliver
 
-1. **Capture.** Classify domain + target artifact from the request. If genuinely
-   underspecified, run the `reference/intent.md` gate (<=5 questions, one round, recommend an
-   answer for each). Resolve doc/data-answerable questions by reading, not asking.
+1. **Capture.** Classify and record one line - `Domain: <X> | Artifact: <Y> | Decision it
+   serves: <Z>` - even when nothing is ambiguous. If genuinely underspecified, run the
+   `reference/intent.md` gate (<=5 questions, one batched round, a recommended answer per
+   question). Resolve doc/data-answerable questions by reading, not asking.
 
-2. **Frame.** Write one line: *the real decision this artifact serves* and *its completion bar*
-   (what "done and trustworthy" looks like for this framework). This is the bar the critic
-   checks against.
+2. **Frame.** Extend that line into the artifact's `## Intent` block: classification, the real
+   decision, and the completion bar (what "done and trustworthy" looks like for this
+   framework). This block is the contract the critic checks against.
 
 3. **Draft.** Load `reference/<domain>.md` and apply the named framework. Use the user's real
    inputs; mark gaps as explicit assumptions. Smallest useful artifact - no filler frameworks.
 
-4. **Critic (independent).** Run `reference/critic.md` as a fresh reader who did not write the
-   draft. Red-team it: missing framework sections, unsupported claims, unvalidated assumptions,
-   decisions the artifact dodges. Emit each as a risk. Do not self-congratulate a draft to green.
+4. **Critic (independent).** Run `reference/critic.md`. Independence is mechanical: if the
+   harness supports subagents, hand a fresh one only the `## Intent` block + the draft;
+   otherwise switch stance and read cold. Red-team: missing framework sections, unsupported
+   claims, unvalidated assumptions, dodged decisions - each emitted as a risk. Do not
+   self-congratulate a draft to green.
 
-5. **Deliver.** Fold the surfaced risks back into the artifact (or list the ones the user must
-   resolve), then stop. Report what was checked and against what. Outward/irreversible steps
-   wait for explicit consent.
+5. **Deliver.** Fold blockers and gaps back in; leave user-owned risks in a `## Critic` block.
+   Response shape: artifact -> remaining risks -> one line on what was checked against what ->
+   the one natural next artifact in the chain (DISCOVER -> STRATEGY -> EXECUTE -> STORYBOARD ->
+   GTM/GROWTH; ANALYTICS measures any) - offer it, don't start it. Inline by default; write
+   files when multi-page or multi-file (storyboard: always files) and report paths.
+   Outward/irreversible steps wait for explicit consent.
+
+## Follow-up turns
+
+The loop is per-artifact, not per-message. On iteration:
+
+- Substantive change (new claim, section, or decision) -> re-Draft, re-run the critic on the
+  delta only.
+- Tone / format / length-only edits -> no critic re-run.
+- New artifact or new domain -> new loop from Capture. "Another idea / different one" in
+  DISCOVER follows the idea-proposal batch rule (`reference/discover.md`).
+- Keep the loaded domain reference; do not re-read it each turn.
 
 ## Reference map
 

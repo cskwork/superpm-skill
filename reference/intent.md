@@ -57,8 +57,10 @@ definition of done. ANALYTICS leans on inputs (the actual schema/metric) + defin
 - **Maximize information gain.** Prefer the question that most narrows the space of viable
   artifacts - one that eliminates a whole branch.
 - **Drop redundant questions.** If the product, docs, or data already answer an aspect, do not ask.
-- **One at a time, recommend an answer.** Ask serially, wait for each reply, and offer your
-  recommended answer so the user can confirm cheaply. Do not batch all questions at once.
+- **One batched round, a recommended answer per question.** Ask the selected questions
+  together, each with your recommended answer, so "go with your recommendations" is a valid
+  one-line reply. At most one follow-up round, only if an answer conflicts or unlocks a new
+  must-have.
 
 ## Hard gate - block the draft
 
@@ -70,6 +72,7 @@ many frameworks (assumptions, experiments, GTM) branch hard on it.
 ## Recording
 
 Write a compact `## Intent` block at the top of the artifact (or alongside it): the
-classification line, each question with its chosen answer or approved assumption, and the
-decision it drove. Do not paste the whole exchange. A skipped interview gets one line stating
-why it was safe to skip.
+classification line, the completion bar (the Frame step's "done and trustworthy" criterion -
+what the critic checks against), and each question with its chosen answer or approved
+assumption. Do not paste the whole exchange. A skipped interview gets one line stating why it
+was safe to skip.

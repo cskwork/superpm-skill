@@ -5,6 +5,7 @@
 
 ## Intent
 - Domain: DISCOVER | Artifact: OST | Decision it serves: <which opportunity to pursue first>
+- Done bar: <what "done and trustworthy" looks like - the critic checks against this>
 
 ## Desired outcome
 <One measurable product/business outcome.>
