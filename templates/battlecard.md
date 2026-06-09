@@ -4,6 +4,7 @@
 
 ## Intent
 - Domain: GTM | Artifact: Battlecard | Decision it serves: <win a live deal vs this competitor>
+- Done bar: <what "done and trustworthy" looks like - the critic checks against this>
 
 ## Their snapshot
 - Positioning: <how they sell themselves>

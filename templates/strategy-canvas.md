@@ -4,6 +4,7 @@
 
 ## Intent
 - Domain: STRATEGY | Artifact: Strategy canvas | Decision it serves: <the bet to commit to>
+- Done bar: <what "done and trustworthy" looks like - the critic checks against this>
 
 1. **Vision** - <the future you are creating>
 2. **Target customer + job** - <who, and the job they hire you for>
