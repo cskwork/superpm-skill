@@ -195,7 +195,7 @@ jumps screen-to-screen without returning to the board. Modeled on the ExamBank s
   script. Single-file, still zero external deps.
 - `reference/storyboard.md` — TOC added to "Storyboard structure", the bundled production note, and
   the critic completeness anchors ("every page carries the same 화면 목차 with the current screen marked").
-- `examples/donga-content-api/` — applied the TOC to `storyboard.css` + `sb-01`/`sb-02` to demo it.
+- `examples/verified-content-api/` — applied the TOC to `storyboard.css` + `sb-01`/`sb-02` to demo it.
 
 ## Decisions and why
 
@@ -234,7 +234,7 @@ Files:
   caption), wrapped the screen in `.sb-zoom > .sb-stage`, added the lightbox markup, and inlined
   three scripts (settings / zoom / lightbox). Still a single self-contained file, zero external deps.
 - `reference/storyboard.md` — "Viewer controls (on by default)" bullet in Storyboard structure.
-- `examples/donga-content-api/` — same controls via shared `storyboard.css` + new `storyboard.js`,
+- `examples/verified-content-api/` — same controls via shared `storyboard.css` + new `storyboard.js`,
   applied to `sb-01`/`sb-02`.
 
 ## Decisions and why
