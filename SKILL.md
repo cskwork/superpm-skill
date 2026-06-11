@@ -1,6 +1,6 @@
 ---
 name: superpm
-description: PM operating system - route a PM ask to its domain framework (discovery, strategy, execution, screen design, research, analytics, GTM, growth, toolkit, AI-shipping), draft the smallest useful artifact, verify with an independent critic. Use for "/superpm", "superpm", "write a PRD", "product strategy", "OKRs", "roadmap", "opportunity solution tree", "user stories", "pre-mortem", "retro", "release notes", "interview script", "화면설계서 / 기능명세", "competitor analysis", "market sizing", "pricing", "personas", "cohort / A/B analysis", "GTM / launch plan", "ICP", "battlecard", "positioning", "North Star metric", "review my resume", "what are people saying", "market signal / voice of customer / trends", or any product-management artifact.
+description: "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, GTM, growth, pricing, positioning, market signals, release notes, retros, and resume reviews."
 ---
 
 # /superpm - one PM request, a verified artifact
