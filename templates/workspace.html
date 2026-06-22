@@ -16,6 +16,9 @@
                    overlaid on its data-callout elements, prev/next paging.
   - Contract: identifiers / rules / codes follow reference/model.md (SPEC-NN, FLOW-NN, R2/R3/R4,
     ORPHAN_NODE / UNMAPPED_SCREEN / ORPHAN_CALLOUT / MISSING_EXCEPTION ...). Validation runs live.
+  - 앱 셸: DATA.brand + DATA.nav[{id,label,icon,target}] + screen.device("web"|"mobile") + screen.nav(active id).
+           web+nav 화면은 좌측 메뉴 앱 셸(실제 사이트처럼)로, mobile/no-nav 화면(팝업·학생·모바일)은 전체화면으로 렌더.
+  - 유저플로우: 시작점 BFS 최초방문 깊이로 좌->우 자동 배치(사이클/실패-back-edge 안전) + 초기 fit-to-view(노드 안 가림).
   - To fill: replace {{PROJECT_NAME}} / {{SNAPSHOT_ID}} and swap the example ssot JSON.
 -->
 <style>
@@ -205,6 +208,8 @@
 <script id="ssot" type="application/json">
 {
   "snapshotId": "{{SNAPSHOT_ID}}",
+  "brand": "My App", "navUser": "사용자",
+  "nav": [{"id":"home","label":"홈","icon":"⌂","target":"SCREEN-02"}, {"id":"set","label":"설정","icon":"⚙"}],
   "features": [
     {"id":"FEAT-01","title":"인증","priority":"P0"},
     {"id":"FEAT-02","title":"홈","priority":"P1"}
@@ -245,7 +250,7 @@
        {"calloutNo":2,"area":"폼","selector":"#password","behavior":"입력 → 길이 검증","dataContract":"password:string","exception":"8자 미만 제출 비활성","linkedSpecId":"SPEC-02"},
        {"calloutNo":3,"area":"폼","selector":"#submit","behavior":"클릭 → POST /sessions","dataContract":"{email,password} → token","exception":"401 시 오류 메시지","linkedSpecId":"SPEC-03"}
      ]},
-    {"id":"SCREEN-02","flowNodeId":"FLOW-04","title":"홈","state":"normal","prev":"SCREEN-01","next":null,
+    {"id":"SCREEN-02","flowNodeId":"FLOW-04","title":"홈","state":"normal","prev":"SCREEN-01","next":null,"device":"web","nav":"home",
      "preview":"<div class='scr'><header class='top' data-callout='1'><strong>대시보드</strong><span class='av'>U</span></header><div class='card'>오늘의 요약<br><small>최근 7일 활동</small></div><div class='card'>알림 3건</div><button class='btn' data-nav='SCREEN-01'>로그아웃</button></div>",
      "elements":[
        {"calloutNo":1,"area":"헤더","selector":".summary","behavior":"세션으로 요약 로드","dataContract":"session → summary","exception":"만료 시 로그인 이동","linkedSpecId":"SPEC-05"}
@@ -279,7 +284,7 @@ function setTab(t){
   $('#title').textContent = TITLES[t]; $('#hint').textContent = HINTS[t];
   $('#tools').innerHTML = '';
   if(t==='spec'){ addTool('표 보기', toggleSpecTable, specTableOn); addTool('맞춤', function(){ specPZ && specPZ.reset(); }); }
-  if(t==='flow'){ addTool('맞춤', function(){ flowPZ && flowPZ.reset(); }); }
+  if(t==='flow'){ addTool('맞춤', function(){ fitFlow(); }); }
   if(t==='flow' && !flowDrawn){ drawFlow(); flowDrawn=true; }
 }
 function addTool(label, fn, pressed){ var b=document.createElement('button'); b.textContent=label;
@@ -302,7 +307,7 @@ function panzoom(host, vp, isSvg){
   window.addEventListener('pointermove',function(e){ if(!pan)return; tx=e.clientX-px; ty=e.clientY-py; apply(); });
   window.addEventListener('pointerup',function(){ pan=false; });
   apply();
-  return {reset:function(){ s=1;tx=0;ty=0;apply(); }, scale:function(){ return s; }};
+  return {reset:function(){ s=1;tx=0;ty=0;apply(); }, scale:function(){ return s; }, set:function(ns,nx,ny){ s=ns;tx=nx;ty=ny;apply(); }};
 }
 
 /* ---------- 기능명세: card canvas + table ---------- */
@@ -345,15 +350,19 @@ var flowPZ, flowDrawn=false, NPOS={}, NW=148, NH=58;
 function layout(){
   var nodes=DATA.flow.nodes, edges=DATA.flow.edges, adj={}, indeg={};
   nodes.forEach(function(n){ adj[n.id]=[]; indeg[n.id]=0; });
-  edges.forEach(function(e){ if(adj[e.from]){ adj[e.from].push(e.to); indeg[e.to]=(indeg[e.to]||0)+1; } });
-  var ind={}; nodes.forEach(function(n){ ind[n.id]=indeg[n.id]; });
-  var q=nodes.filter(function(n){ return !ind[n.id]; }).map(function(n){ return n.id; }), order=[], depth={};
-  nodes.forEach(function(n){ depth[n.id]=0; });
-  while(q.length){ var id=q.shift(); order.push(id);
-    adj[id].forEach(function(t){ depth[t]=Math.max(depth[t], depth[id]+1); if(--ind[t]===0) q.push(t); }); }
-  var byd={}; nodes.forEach(function(n){ (byd[depth[n.id]]=byd[depth[n.id]]||[]).push(n.id); });
-  NPOS={};
-  Object.keys(byd).forEach(function(d){ byd[d].forEach(function(id,i){ NPOS[id]={x:60+(+d)*232, y:48+i*120}; }); });
+  edges.forEach(function(e){ if(adj[e.from]){ adj[e.from].push(e.to); if(indeg[e.to]!=null) indeg[e.to]++; } });
+  // 깊이 = 시작점에서 BFS 최초방문 거리 (사이클/역방향 엣지에 안전 - 실패·재시도 back-edge는 레이어링서 무시, 곡선으로 표시)
+  var roots=nodes.filter(function(n){ return n.type==='start' || indeg[n.id]===0; }).map(function(n){ return n.id; });
+  if(!roots.length) roots=[nodes[0].id];
+  var depth={}, q=roots.slice(); roots.forEach(function(r){ depth[r]=0; });
+  while(q.length){ var id=q.shift(); (adj[id]||[]).forEach(function(t){ if(depth[t]==null){ depth[t]=depth[id]+1; q.push(t); } }); }
+  var md=0; Object.keys(depth).forEach(function(k){ if(depth[k]>md) md=depth[k]; });
+  nodes.forEach(function(n){ if(depth[n.id]==null) depth[n.id]=md+1; });
+  var byd={}, maxc=0; nodes.forEach(function(n){ (byd[depth[n.id]]=byd[depth[n.id]]||[]).push(n.id); });
+  Object.keys(byd).forEach(function(d){ if(byd[d].length>maxc) maxc=byd[d].length; });
+  NPOS={}; var COLW=250, ROWH=104, midY=maxc*ROWH/2;
+  Object.keys(byd).forEach(function(d){ var c=byd[d], off=midY-c.length*ROWH/2;
+    c.forEach(function(id,i){ NPOS[id]={x:64+(+d)*COLW, y:40+off+i*ROWH}; }); });
   var sp=st.flowPos||{}; Object.keys(sp).forEach(function(id){ if(NPOS[id]) NPOS[id]=sp[id]; });
 }
 function edgePath(a,b){
@@ -383,7 +392,15 @@ function drawFlow(){
       (specs?'<text class="sp" x="12" y="50">'+esc(specs)+'</text>':'');
     ng.appendChild(g); enableDrag(g,n);
   });
-  flowPZ = panzoom($('#flowCanvas'), $('#flowVp'), true);
+  flowPZ = panzoom($('#flowCanvas'), $('#flowVp'), true); fitFlow();
+}
+function fitFlow(){ if(!flowPZ) return;
+  var xs=[],ys=[]; DATA.flow.nodes.forEach(function(n){ var p=NPOS[n.id]; if(p){ xs.push(p.x,p.x+NW); ys.push(p.y,p.y+NH); } });
+  if(!xs.length) return;
+  var minx=Math.min.apply(null,xs),maxx=Math.max.apply(null,xs),miny=Math.min.apply(null,ys),maxy=Math.max.apply(null,ys);
+  var r=$('#flowCanvas').getBoundingClientRect(), pad=46;
+  var s=Math.min(r.width/(maxx-minx+pad*2), r.height/(maxy-miny+pad*2), 1.1);
+  flowPZ.set(s, (r.width-(maxx+minx)*s)/2, (r.height-(maxy+miny)*s)/2);
 }
 function enableDrag(g,n){
   var dragging=false,moved=false,ox,oy;
@@ -425,12 +442,17 @@ function showSpecById(specId){
 
 /* ---------- 와이어프레임: live iframe ---------- */
 var WIRECSS = "<style>*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,'Noto Sans KR',sans-serif}"+
-  "body{padding:22px;background:#fff;color:#1a1f29;font-size:15px}.scr{display:flex;flex-direction:column;gap:14px}"+
-  "h1{font-size:24px}.sub{color:#6b7280;font-size:14px;margin-top:-8px}.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#374151}"+
-  "input{padding:12px;border:1px solid #d1d5db;border-radius:9px;font-size:15px}.btn{padding:13px;background:#2d6cdf;color:#fff;border:0;border-radius:9px;font-size:15px;cursor:pointer}"+
-  ".link{color:#2d6cdf;font-size:13px;text-align:center;text-decoration:none}.top{display:flex;justify-content:space-between;align-items:center;padding:6px 2px}"+
+  "body{padding:0;background:#eef1f5;color:#1a1f29;font-size:15px}.scr{display:flex;flex-direction:column;gap:14px;padding:22px;background:#fff;min-height:100%}"+
+  "h1{font-size:22px}.sub{color:#6b7280;font-size:14px;margin-top:-8px}.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#374151}"+
+  "input,select{padding:11px;border:1px solid #d1d5db;border-radius:9px;font-size:14px;background:#fff}.btn{padding:11px 16px;background:#2d6cdf;color:#fff;border:0;border-radius:9px;font-size:14px;cursor:pointer}.btn.ghost{background:#fff;color:#2d6cdf;border:1px solid #2d6cdf}"+
+  ".link{color:#2d6cdf;font-size:13px;text-decoration:none}.top{display:flex;justify-content:space-between;align-items:center;padding:6px 2px}"+
   ".av{width:34px;height:34px;border-radius:50%;background:#2d6cdf;color:#fff;display:flex;align-items:center;justify-content:center}"+
-  ".card{padding:18px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb}"+
+  ".card{padding:16px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb}table{width:100%;border-collapse:collapse;font-size:13px}th,td{border:1px solid #e5e7eb;padding:8px 10px;text-align:left}th{background:#f8fafc;font-weight:600}.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}"+
+  ".wf{display:grid;grid-template-columns:184px 1fr;min-height:100vh}"+
+  ".wf-side{background:#0f1b2e;color:#cbd5e1;display:flex;flex-direction:column;padding:14px 10px;gap:3px}"+
+  ".wf-brand{color:#fff;font-weight:700;font-size:14px;padding:6px 8px 14px;display:flex;align-items:center;gap:8px}.wf-brand .bi{width:24px;height:24px;border-radius:7px;background:#2d6cdf;display:flex;align-items:center;justify-content:center;font-size:13px}"+
+  ".wf-side a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#cbd5e1;text-decoration:none;font-size:13px;cursor:pointer}.wf-side a:hover{background:#1e2b44}.wf-side a.on{background:#2d6cdf;color:#fff;font-weight:600}.wf-side .ic{width:16px;text-align:center;opacity:.85}.wf-side .sep{height:1px;background:#1e2b44;margin:8px 6px}.wf-side .grow{flex:1}.wf-side .me{font-size:12px;color:#7c8aa3;padding:9px 12px;border-top:1px solid #1e2b44;margin-top:6px}"+
+  ".wf-main{display:flex;flex-direction:column;min-width:0;background:#eef1f5}.wf-top{display:flex;align-items:center;gap:8px;padding:11px 20px;background:#fff;border-bottom:1px solid #e5e7eb;font-size:12px;color:#9aa4b2}.wf-top b{color:#1a1f29;font-size:15px}.wf-content{padding:18px;overflow:auto}.wf-content .scr{border-radius:12px;border:1px solid #e5e7eb}"+
   ".sb-cue{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:#e5484d;color:#fff;border:2px solid #fff;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:9}[data-nav]{cursor:pointer}[data-nav]:hover{outline:2px solid #2d6cdf;outline-offset:2px}</style>";
 var wireIdx=0, cueOn = st.cueOn!==false;
 function renderWireSel(){ var sel=$('#wireSel'); sel.innerHTML='';
@@ -441,10 +463,23 @@ function renderWireSel(){ var sel=$('#wireSel'); sel.innerHTML='';
   $('#cueToggle').onclick=function(){ cueOn=!cueOn; st.cueOn=cueOn; save(); $('#cueToggle').setAttribute('aria-pressed',cueOn); paintCues(); };
   $('#cueToggle').setAttribute('aria-pressed',cueOn);
 }
+function shellHTML(sc){
+  var brand=DATA.brand||'App';
+  var items=(DATA.nav||[]).map(function(n){
+    return '<a class="'+(n.id===sc.nav?'on':'')+'"'+(n.target?' data-nav="'+n.target+'"':'')+'><span class="ic">'+esc(n.icon||'•')+'</span>'+esc(n.label)+'</a>';
+  }).join('');
+  var inner = sc.preview || '<div class="scr"><p>미리보기(preview) 미정의</p></div>';
+  return '<div class="wf"><nav class="wf-side"><div class="wf-brand"><span class="bi">▦</span>'+esc(brand)+'</div>'+
+    items+'<div class="grow"></div><div class="me">'+esc(DATA.navUser||'사용자')+'</div></nav>'+
+    '<div class="wf-main"><div class="wf-top">'+esc(brand)+' <span>›</span> <b>'+esc(sc.title)+'</b></div>'+
+    '<div class="wf-content">'+inner+'</div></div></div>';
+}
 function showScreen(){
   var sc=DATA.screens[wireIdx]; var f=$('#wireFrame');
+  if(sc.device){ vpMode=sc.device; applyVp(); }
   $('#wireSel').value=wireIdx; $('#wireState').textContent='['+(sc.state||'normal')+']';
-  f.srcdoc = WIRECSS + (sc.preview||'<div class="scr"><p>미리보기(preview) 미정의</p></div>');
+  var useShell = DATA.nav && DATA.nav.length && sc.nav;
+  f.srcdoc = WIRECSS + (useShell ? shellHTML(sc) : (sc.preview||'<div class="scr"><p>미리보기(preview) 미정의</p></div>'));
   f.onload=function(){ paintCues(); wireNav(f); };
   var rows=$('#wireRows'); rows.innerHTML='';
   (sc.elements||[]).forEach(function(e){
@@ -512,7 +547,7 @@ $('#exportBtn').onclick=function(){ var blob=new Blob([JSON.stringify(DATA,null,
   var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(DATA.snapshotId||'workspace')+'.json'; a.click(); };
 
 /* ---------- init ---------- */
-var vpMode = st.vpMode==='web' ? 'web' : 'mobile';
+var vpMode = st.vpMode==='mobile' ? 'mobile' : 'web';
 function applyVp(){ var d=$('#device'); if(d) d.className='device '+vpMode; var b=$('#vpToggle'); if(b) b.textContent=(vpMode==='mobile'?'웹 보기':'모바일 보기'); }
 $('#vpToggle').onclick=function(){ vpMode=(vpMode==='mobile'?'web':'mobile'); st.vpMode=vpMode; save(); applyVp(); };
 var fz = st.fz || 100;

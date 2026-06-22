@@ -82,7 +82,8 @@ in `reference/signal.md` first.
    the one natural next artifact in the chain (DISCOVER -> STRATEGY -> EXECUTE -> FLOW ->
    STORYBOARD -> PACKAGE; GTM/GROWTH for launch; ANALYTICS measures any) - offer it, don't start
    it. Inline by default; write
-   files when multi-page or multi-file (storyboard: always files) and report paths.
+   files when multi-page or multi-file (STORYBOARD/PACKAGE: always files, default
+   `templates/workspace.html` - the interactive SSOT canvas) and report paths.
    Outward/irreversible steps wait for explicit consent.
 
 For a **PLAN session** (`reference/plan.md`), run this loop once per stage
@@ -113,7 +114,7 @@ The loop is per-artifact, not per-message. On iteration:
 | `reference/strategy.md` | STRATEGY: strategy canvas, vision, value prop, lean/business model, pricing, analysis frameworks |
 | `reference/execute.md` | EXECUTE: PRD, OKRs, roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization |
 | `reference/flow.md` | FLOW: user-flow graph - nodes derived from SPECs (R2), page->screen hand-off (R3), zero-dep visualization (text list + .wf-* boxes) |
-| `reference/storyboard.md` | STORYBOARD: 화면설계서/기능명세 - derive screens, wireframe (Mode B) or replica (Mode A), per-element spec; standalone via bundled HTML, delegates to the `storyboard-spec` skill if present |
+| `reference/storyboard.md` | STORYBOARD: 화면설계서/기능명세 - derive screens, per-element spec; **default output `templates/workspace.html`** (interactive 3-tab SSOT canvas: 기능명세/유저플로우/와이어프레임); per-screen image-replica set (Mode A) optional via bundled HTML / `storyboard-spec` |
 | `reference/package.md` | PACKAGE: integrated implementation bundle - one snapshotId over PRD+spec+flow+wireframe (R6), back-link integrity, md/json/svg/html export |
 | `reference/research.md` | RESEARCH: personas, segments, journey map, market sizing, competitor, sentiment |
 | `reference/analytics.md` | ANALYTICS: NL->SQL, cohort, A/B test |

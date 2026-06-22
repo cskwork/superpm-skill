@@ -83,29 +83,44 @@ run `1..N` with no gaps (`MISSING_CALLOUT`); a SPEC exception with no screen sta
   (full-screen lightbox that clones the screen stage), and 이전/다음 pager. These work in both
   modes (the zoom/lightbox operate on the `.sb-stage`, whether it holds a wireframe or an `<img>`).
 
-## Production - delegate if storyboard-spec is present, else bundle (standalone)
+## Production - default to workspace.html
 
-superpm produces the full 화면설계서 with **no external dependency**. If the richer
-`storyboard-spec` skill happens to be installed, hand it the heavy rendering.
+The **default deliverable is `templates/workspace.html`** - superpm's own self-contained,
+interactive 3-tab canvas (기능명세 cards / 유저플로우 SVG / live 와이어프레임), driven by one
+embedded SSOT JSON (`model.md`). **Always produce it** unless the user explicitly asks only for
+the per-screen image-replica set. To fill it: swap `{{PROJECT_NAME}}` / `{{SNAPSHOT_ID}}`, replace
+the example `ssot` script JSON with the real `features / specs / flow / screens` graph, and the
+embedded live validation (R2/R3/R4 + `MISSING_*`) checks back-link integrity in the browser. Each
+`screen.preview` is **real working HTML** carrying `data-callout="N"` (the callout overlay) and
+`data-nav="SCREEN-NN"` (so the wireframe is a clickable prototype following the flow). Zero
+external CSS/JS - double-click opens it in any browser, offline.
 
-1. **Detect.** Check for `~/.claude/skills/storyboard-spec/SKILL.md` (or a `storyboard-spec/`
-   skill directory).
-2. **If present -> delegate.** Pass it the screen list, the per-screen element tables, and the
-   mode. It renders the polished site and adds what superpm's bundle deliberately omits: Figma
-   REST auto-extraction (Mode A), headless-Chrome thumbnails + verification screenshots, and
-   themeable CSS. Use it; do not re-implement its work.
-3. **If absent -> bundle (the default).** Build the document from superpm's self-contained
-   templates - zero external CSS/JS, opens straight in a browser:
-   - `templates/storyboard-page.html` - copy once per screen; fill the `{{...}}` and replace the
-     example wireframe; name it `sb-NN-<slug>.html`. Includes the 화면 목차 (TOC) rail by default -
-     paste the same screen list into every page, flipping only `current`. Left = wireframe/replica
-     markup with `sb-mark` + `sb-cue` markers; right = the `sb-notes` table.
-   - `templates/storyboard-board.html` - the thumbnail/index board linking every page (live
-     `<iframe>` thumbnails, so no screenshot step is needed).
+For a real-app feel, set `brand` + `nav` (the app's side menu) on the SSOT and `device`
+("web" | "mobile") + `nav` (active menu id) per screen: web+nav screens render inside a
+persistent left-menu app shell, while mobile / popup / no-nav screens render full-screen. The
+flow auto-lays-out left-to-right (cycle-safe BFS from the start node; failure / back-edges curve
+back) and fits-to-view on open, so no node overlaps or is hidden.
 
-The placeholders match storyboard-spec's contract exactly, so a document started standalone
-upgrades cleanly if that skill is added later. Either path yields the same artifact shape; only
-the rendering polish differs.
+Build it coherently so validation goes green: every `page`/`action`/`decision` flow node links
+to >=1 real SPEC (R2); every `page` node has a `screen` whose `flowNodeId` matches it (R3); every
+screen callout's `linkedSpecId` resolves and its `exception` restates that SPEC's exception (R4 /
+`MISSING_EXCEPTION`); callout numbers run `1..N` (`MISSING_CALLOUT`). For a large screen set, fan
+the screen-`preview` authoring out to subagents over a pre-assigned SPEC/SCREEN id range, then
+merge and re-validate.
+
+The per-screen side-by-side pages (`sb-NN-*.html` + board) are an **optional supplement** - reach
+for them when the source is a built/Figma screen to be documented as an **image replica** (Mode A),
+or when a reader wants one printable page per screen:
+
+1. **Detect.** Check for `~/.claude/skills/storyboard-spec/SKILL.md`.
+2. **If present -> delegate** the per-screen image-replica rendering (Figma REST auto-extraction,
+   headless-Chrome thumbnails, themeable CSS). Do not re-implement its work.
+3. **If absent -> bundle** from `templates/storyboard-page.html` (one per screen; `{{...}}` +
+   `sb-mark`/`sb-cue` markers; right = the `sb-notes` table) + `templates/storyboard-board.html`
+   (thumbnail board).
+
+workspace.html and the per-screen set share the same SSOT shape, so a document can ship both - but
+workspace.html is the default and the per-screen pages are added only on request or for Mode A.
 
 ## Critic completeness anchors
 
