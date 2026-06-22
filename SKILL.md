@@ -33,10 +33,13 @@ one-paragraph note you could write directly, skip the skill.
 ## Intent capture - signal to domain
 
 Read the request and route to one domain (the artifact named usually decides it). When the ask
-spans domains, pick the primary deliverable and pull supporting frameworks from the others.
+spans domains, pick the primary deliverable and pull supporting frameworks from the others. When
+the ask is to **plan a buildable thing end-to-end** (기획하자 / 개발하고 싶어, no single artifact
+named), route to **PLAN** - a stepped session over the chain, not one artifact (`reference/plan.md`).
 
 | Signal in the request | Domain | Reference |
 |---|---|---|
+| 기획하자 / 이거 개발하고 싶어 / 기획 도와줘 / plan this feature end-to-end / PRD부터 화면까지 | **PLAN** (session) | `reference/plan.md` |
 | brainstorm ideas / risky assumptions / opportunity tree / prioritize features / customer interview / metrics | **DISCOVER** | `reference/discover.md` |
 | product strategy / vision / value proposition / lean or business model / monetization / pricing / SWOT / PESTLE / Porter / Ansoff | **STRATEGY** | `reference/strategy.md` |
 | PRD / OKRs / roadmap / sprint plan / retro / pre-mortem / user or job stories / stakeholder map / prioritization framework / red-team a plan | **EXECUTE** | `reference/execute.md` |
@@ -82,6 +85,10 @@ in `reference/signal.md` first.
    files when multi-page or multi-file (storyboard: always files) and report paths.
    Outward/irreversible steps wait for explicit consent.
 
+For a **PLAN session** (`reference/plan.md`), run this loop once per stage
+(EXECUTE -> FLOW -> STORYBOARD -> PACKAGE), gating for the user after each and carrying the running
+SSOT JSON forward; the whole chain is the deliverable, ending in `workspace.html` + a PACKAGE.
+
 ## Follow-up turns
 
 The loop is per-artifact, not per-message. On iteration:
@@ -101,6 +108,7 @@ The loop is per-artifact, not per-message. On iteration:
 | `reference/critic.md` | Critic: independent red-team verification gate (every domain) |
 | `reference/signal.md` | Signal: live market & customer evidence (voice of customer), read-only + keyless; feeds RESEARCH/DISCOVER/GTM, delegates to the `last30days` skill if present |
 | `reference/model.md` | MODEL: shared data contract (SSOT) - identifiers, entities, sync rules R1-R6, validation codes; flow/storyboard/package/critic reference it (cross-cutting) |
+| `reference/plan.md` | PLAN: stepped build-planning session - EXECUTE→FLOW→STORYBOARD→PACKAGE over one SSOT, gated per stage (orchestrator) |
 | `reference/discover.md` | DISCOVER: ideation, assumptions, OST, prioritization, interviews, metrics |
 | `reference/strategy.md` | STRATEGY: strategy canvas, vision, value prop, lean/business model, pricing, analysis frameworks |
 | `reference/execute.md` | EXECUTE: PRD, OKRs, roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization |

@@ -15,6 +15,11 @@ reading first, never by asking:
 - **A framework is named?** Use it. Do not interview about which framework to apply.
 - **Multiple artifacts implied?** Name the primary deliverable; treat the rest as supporting
   frameworks pulled in during Draft, not separate artifacts.
+- **A buildable thing to plan end-to-end?** "기획하자 / 이거 개발하고 싶어 / 기획 도와줘 / plan this
+  feature / PRD부터 화면까지" with no single named artifact -> route to **PLAN**
+  (`reference/plan.md`): a stepped `EXECUTE -> FLOW -> STORYBOARD -> PACKAGE` session that shares
+  the SPEC as SSOT and gates after each stage. This overrides "name the primary deliverable" - the
+  whole chain is the deliverable. (Only one stage named, e.g. "PRD만" -> stay single-artifact.)
 
 Record the classification in one line: `Domain: <X> | Artifact: <Y> | Decision it serves: <Z>`.
 
