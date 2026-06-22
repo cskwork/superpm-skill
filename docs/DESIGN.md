@@ -111,7 +111,9 @@ gate extends to screens via `reference/storyboard.md`'s completeness anchors (no
 ## The implementation chain: EXECUTE -> FLOW -> STORYBOARD -> PACKAGE
 
 When the ask is "help me plan what I want to build" - not a single PM doc - four domains form a
-chain that hands a developer-ready package off at the end. They share one source of truth, the
+chain that hands a developer-ready package off at the end. The **PLAN session**
+(`reference/plan.md`) runs this chain stepwise - one stage per turn, gated for the user after each.
+They share one source of truth, the
 **Specification (기능명세)**, so the documents never drift apart:
 
 - **EXECUTE** settles requirements (PRD) and the SPECs under them.
