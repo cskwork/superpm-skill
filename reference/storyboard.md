@@ -12,15 +12,20 @@ callouts, and every data/exception named or marked an assumption.
 
 ## Upstream contract - where the screen list comes from
 
-Do not invent screens. Derive them from what the prior loop produced:
+Do not invent screens. Derive them from the **FLOW graph** (`flow.md`; R3 in `model.md`): every
+`page` node yields >=1 Screen, plus one per non-happy state (empty / error / loading /
+permission). A `page` node with no screen is `UNMAPPED_SCREEN` (critic blocker).
+
+If no flow exists (storyboard used standalone), fall back to the prior loop's output:
 
 - **Customer journey map** (`research.md`) -> one screen per stage / moment of truth.
 - **PRD section 6 UX/flows + user stories** (`execute.md`) -> one screen per step in the key flow;
   one extra page per non-happy state (empty / error / loading / permission).
 - **OST solutions** (`discover.md`) -> the screens the chosen solution requires.
 
-Output of this step: a flat screen list, each row `SCREEN_ID | title | state | prev -> next`. A
-screen with no entry/exit is incomplete - every screen is reachable and leads somewhere.
+Output of this step: a flat screen list, each row `SCREEN-NN | title | state | prev -> next`,
+each screen tied to its source `page` node. A screen with no entry/exit is incomplete - every
+screen is reachable and leads somewhere.
 
 ## Mode - B (기획) vs A (문서화)
 
@@ -52,6 +57,12 @@ becomes a callout row:
 Cover every interactive element (buttons, inputs, links, toggles) and every data-bound region
 (lists, counters, status). A static label with no data and no event needs no row. An on-screen
 element with no row is a gap; a row with no left-side marker is an orphan - both fail the critic.
+
+Each callout row back-links to its source SPEC (`linkedSpecId`; `model.md` R4) - its 동작 / 데이터
+/ 예외 restate that SPEC's `businessRule` / `dataContract` / `exception`, so a developer reads the
+same contract from either side. A callout with no SPEC is `ORPHAN_CALLOUT`; callout numbers must
+run `1..N` with no gaps (`MISSING_CALLOUT`); a SPEC exception with no screen state is
+`MISSING_EXCEPTION`.
 
 ## Storyboard structure
 

@@ -62,10 +62,13 @@ reference/
   intent.md       intent classification + <=5 question interview gate
   critic.md       independent critic / red-team verification gate
   signal.md       live market & customer signal (voice of customer) - keyless, read-only; delegates to last30days if installed
+  model.md        shared data contract (SSOT) - identifiers, entities, sync rules R1-R6, validation codes (cross-cutting)
   discover.md     pm-product-discovery frameworks
   strategy.md     pm-product-strategy frameworks
   execute.md      pm-execution frameworks
+  flow.md         user-flow graph - nodes derived from SPECs (R2), page->screen hand-off (R3), zero-dep visualization
   storyboard.md   화면설계서/기능명세 storyboard - bundled-standalone, delegates to storyboard-spec if installed
+  package.md      integrated implementation bundle - one snapshotId over PRD+spec+flow+wireframe (R6), back-link integrity, export
   research.md     pm-market-research frameworks
   analytics.md    pm-data-analytics frameworks
   gtm.md          pm-go-to-market frameworks
@@ -75,6 +78,7 @@ reference/
 templates/        high-value artifact templates (PRD, strategy canvas, OST, battlecard, ...)
   storyboard-page.html   self-contained one-screen 화면설계서 page (inline CSS, no deps)
   storyboard-board.html  self-contained thumbnail/index board (live iframe thumbs)
+  workspace.html         self-contained 3-tab workspace (기능명세/유저플로우/와이어프레임) - embedded SSOT JSON, live validation, no deps
 docs/DESIGN.md    this file
 ```
 
@@ -103,6 +107,27 @@ The artifact also folds 기능명세 into the same deliverable: the right-pane p
 (action / data / exception / state) *is* the functional spec - one document, not two. The critic
 gate extends to screens via `reference/storyboard.md`'s completeness anchors (no dead-end screens,
 1:1 callout-to-row, sourced data contracts, non-happy states covered).
+
+## The implementation chain: EXECUTE -> FLOW -> STORYBOARD -> PACKAGE
+
+When the ask is "help me plan what I want to build" - not a single PM doc - four domains form a
+chain that hands a developer-ready package off at the end. They share one source of truth, the
+**Specification (기능명세)**, so the documents never drift apart:
+
+- **EXECUTE** settles requirements (PRD) and the SPECs under them.
+- **FLOW** (`reference/flow.md`) derives the user-flow graph from those SPECs (R2) - a page/action
+  node that links to no SPEC is never invented.
+- **STORYBOARD** turns each flow `page` node into a screen (R3); each callout back-links to its
+  SPEC (R4), so the screen and the spec read the same contract from either side.
+- **PACKAGE** (`reference/package.md`) bundles PRD + SPEC + flow + wireframe under one
+  `snapshotId` (R6) - the 기획서 산출물 a developer or coding agent implements from.
+
+`reference/model.md` is the **cross-cutting data contract** (like intent/critic/signal - no
+domain count change): it names the identifiers (`SPEC-NN`, `FLOW-NN`, `SCREEN-NN`), the sync rules
+R1-R6, and the validation codes (`ORPHAN_NODE`, `UNMAPPED_SCREEN`, `ORPHAN_CALLOUT`, ...). The
+critic checks these as **traceability**. `templates/workspace.html` is a self-contained 3-tab
+viewer (기능명세 / 유저플로우 / 와이어프레임) that renders an embedded SSOT JSON and runs those
+validation codes **live in the browser** - the blocker gate, with no backend.
 
 ## SIGNAL: live market evidence, keyless + standalone
 

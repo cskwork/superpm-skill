@@ -27,6 +27,13 @@ weakness, you have not read hard enough; name the weakest claim and pressure-tes
    section list from the domain reference (e.g. PRD's 8 sections, value prop's 6 parts, lean
    canvas's 9 blocks, TAM/SAM/SOM's three layers). Each missing or hand-waved section is a risk.
 
+   For **chained artifacts** (FLOW / STORYBOARD / PACKAGE), completeness also means
+   **traceability** (`model.md`): every flow `page`/`action` node links to a real SPEC (else
+   `ORPHAN_NODE` / `FLOW_GENERATION_BLOCKED`); every `page` node has a screen (`UNMAPPED_SCREEN`);
+   every screen callout maps 1:1 to a SPEC (`ORPHAN_CALLOUT`, `MISSING_CALLOUT`); every SPEC
+   exception surfaces as a screen state (`MISSING_EXCEPTION`); a PACKAGE shares one `snapshotId`
+   across all artifacts (R6). A broken back-link is a Blocker - cite the code by name.
+
 2. **Evidence.** Is every number, quote, segment, and competitor claim traced to the user's
    data, a cited source, or a labeled assumption? An unsourced number presented as fact is the
    highest-severity risk. Demote invented specifics to "assumption - validate with X."
@@ -56,6 +63,8 @@ Return a short risk list, not a rewrite:
 - [Blocker] Market sizing cites "$4B TAM" with no source -> label as assumption or derive from
   <segment size x ARPU>.
 - [Blocker] PRD has no Success Metrics section; the launch/no-launch call needs it.
+- [Blocker] FLOW-07 "결제 확인" links to no SPEC -> ORPHAN_NODE; add a SPEC or delete the node.
+- [Blocker] SCREEN-03 callout 4 has no matching SPEC row -> ORPHAN_CALLOUT.
 - [Gap] Persona "busy admin" has no evidence; mark as hypothesis to test in 3 interviews.
 - [Polish] Roadmap mixes outcomes and features; split so each row is one outcome.
 ```

@@ -41,14 +41,19 @@ The same loop runs for every domain; only the framework that loads changes.
    unvalidated assumptions, dodged decisions - each emitted as a risk.
 5. **Deliver** - fold the risks back in and stop, reporting what was checked.
 
-## Domains (9 pm-skills plugins + a screen-design route = 10)
+## Domains (9 pm-skills plugins + screen-design + flow + package = 12)
+
+The four build-planning domains form a chain on one source of truth (the 기능명세 / SPEC):
+**EXECUTE -> FLOW -> STORYBOARD -> PACKAGE**, contract in [`reference/model.md`](reference/model.md).
 
 | Domain | Covers |
 |---|---|
 | **DISCOVER** | ideation, risky assumptions, opportunity solution tree, feature prioritization, customer interviews, metrics |
 | **STRATEGY** | strategy canvas, vision, value proposition, lean/business model, monetization, pricing, SWOT/PESTLE/Porter/Ansoff |
 | **EXECUTE** | PRD, OKRs, outcome roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization frameworks, red-team |
+| **FLOW** | user-flow graph - nodes derived from SPECs (R2), page->screen hand-off (R3), zero-dep visualization (text list + boxes) |
 | **STORYBOARD** | 화면설계서/기능명세 screen design docs - wireframe (plan-first) or replica/Figma, per-element spec; runs standalone via bundled HTML, optional `storyboard-spec` accelerator |
+| **PACKAGE** | integrated implementation bundle - PRD+spec+flow+wireframe under one snapshotId (R6), back-link integrity, md/json/svg/html export |
 | **RESEARCH** | personas, segmentation, customer journey, market sizing (TAM/SAM/SOM), competitor analysis, sentiment - grounded in live, keyless market signal (voice of customer) |
 | **ANALYTICS** | NL->SQL, cohort analysis, A/B test read-out |
 | **GTM** | go-to-market, beachhead, ICP, growth loops, motions, battlecard |
@@ -79,8 +84,8 @@ Then in your agent CLI: `/superpm <your PM ask>`.
 
 ```
 SKILL.md      thin spine: principles, intent-capture table, the loop, reference map
-reference/    intent · critic · signal · discover · strategy · execute · storyboard · research · analytics · gtm · growth · toolkit · ai-ship
-templates/    PRD · strategy canvas · opportunity solution tree · battlecard · storyboard page/board
+reference/    intent · critic · signal · model · discover · strategy · execute · flow · storyboard · package · research · analytics · gtm · growth · toolkit · ai-ship
+templates/    PRD · strategy canvas · opportunity solution tree · battlecard · storyboard page/board · workspace (3-tab)
 docs/         DESIGN.md
 ```
 
