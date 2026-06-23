@@ -108,6 +108,20 @@ screen callout's `linkedSpecId` resolves and its `exception` restates that SPEC'
 the screen-`preview` authoring out to subagents over a pre-assigned SPEC/SCREEN id range, then
 merge and re-validate.
 
+### 대규모: 모듈 분리 모드 (도메인 기능별 분리)
+
+When the screen set spans many domains (e.g. 7 modules / 40+ screens), keep `workspace.html` a
+self-contained **shell** but split the SSOT into **one data file per module** so each domain is
+owned, authored, and verified independently:
+
+- `data/_common.js` (`templates/workspace-data-common.js`) - `window.SSOT` root + `registerModule()`; loaded first.
+- `data/NN-<module>.js` (`templates/workspace-data-module.js`) - one `registerModule({id,label,order,features,specs,screens,flow})` per domain (one 기능명세 / module).
+- `workspace.html` loads them before the app via `<script src="data/_common.js">` ... `<script src="data/01-<module>.js">` ..., then merges `window.SSOT`: sorts by module `order`, and auto-stitches hub->entry edges from the `hub:true` node to each module's `entry:true` node. A module filter (`#modSel`) scopes all three tabs and auto-hides for single-module / inline-`#ssot` storyboards (fully backward compatible).
+- Classic `<script src>` is CORS-exempt, so double-click-offline (`file://`) still holds.
+- Fan each module file out to a fresh subagent against the shared contract + a golden example module; each self-validates its own file in isolation (the 5 `model.md` rules), then assemble and re-run whole-SSOT validation (no duplicate ids across modules, every `data-nav` target resolves).
+
+Use inline `#ssot` (single file) for small storyboards; switch to module files once the set is large or multi-domain.
+
 The per-screen side-by-side pages (`sb-NN-*.html` + board) are an **optional supplement** - reach
 for them when the source is a built/Figma screen to be documented as an **image replica** (Mode A),
 or when a reader wants one printable page per screen:
