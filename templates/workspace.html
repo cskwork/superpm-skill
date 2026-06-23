@@ -67,7 +67,8 @@
   .canvas:active{cursor:grabbing}
   svg.flow{position:absolute;inset:0;width:100%;height:100%}
   .flow .edge{fill:none;stroke:#9aa4b2;stroke-width:1.6}
-  .flow .elabel{fill:var(--mut);font-size:11px}
+  .flow .elabel .elbg{fill:#fff;stroke:#dbe2ea;stroke-width:1;opacity:.96}
+  .flow .elabel .eltx{fill:#475569;font-size:11px;font-weight:600}
   .node{cursor:grab}
   .node rect{rx:9;stroke-width:1.5;fill:#fff}
   .node.sel rect{stroke-width:3}
@@ -150,6 +151,7 @@
     <div class="bar">
       <h2 id="title">기능명세</h2>
       <span class="hint" id="hint"></span>
+      <select id="modSel" title="모듈(섹션) 필터" style="margin-left:10px;font-size:12px;padding:5px 8px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:#0f172a;cursor:pointer;display:none"></select>
       <div class="right" id="tools"></div>
     </div>
 
@@ -269,7 +271,35 @@
 var $ = function(s,r){ return (r||document).querySelector(s); };
 var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
 var SVGNS = 'http://www.w3.org/2000/svg';
-var DATA = JSON.parse($('#ssot').textContent);
+/* ---------- SSOT 소스: 모듈 분리(window.SSOT) 우선, 없으면 인라인 #ssot(단일 파일) ---------- */
+var FULL = window.SSOT || (function(){ var n=$('#ssot'); return n?JSON.parse(n.textContent):{brand:'',navUser:'',snapshotId:'',nav:[],modules:[],features:[],specs:[],screens:[],flow:{nodes:[],edges:[]}}; })();
+FULL.modules=FULL.modules||[]; FULL.features=FULL.features||[]; FULL.specs=FULL.specs||[]; FULL.screens=FULL.screens||[]; FULL.flow=FULL.flow||{nodes:[],edges:[]};
+(function(){
+  FULL.modules.sort(function(a,b){ return (a.order||99)-(b.order||99); });
+  var morder={}; FULL.modules.forEach(function(m,i){ morder[m.id]=i; });
+  function mo(x){ return morder[x]==null?99:morder[x]; }
+  function byMod(a){ return a.slice().sort(function(x,y){ return mo(x.moduleId)-mo(y.moduleId); }); }
+  FULL.features=byMod(FULL.features); FULL.specs=byMod(FULL.specs); FULL.screens=byMod(FULL.screens); FULL.flow.nodes=byMod(FULL.flow.nodes);
+  var hub=FULL.flow.nodes.filter(function(n){ return n.hub; })[0];
+  if(hub){ FULL.flow.nodes.forEach(function(n){ if(n.entry && n.id!==hub.id){
+    var ex=FULL.flow.edges.some(function(e){ return e.from===hub.id && e.to===n.id; });
+    if(!ex) FULL.flow.edges.push({from:hub.id,to:n.id,condition:n.entryLabel||''}); }}); }
+})();
+var curMod='all', DATA;
+function applyMod(){
+  if(curMod==='all' || !FULL.modules.some(function(m){ return m.id===curMod; })){ curMod='all'; DATA=FULL; return; }
+  var nodes=FULL.flow.nodes.filter(function(n){ return n.moduleId===curMod; }), nid={};
+  nodes.forEach(function(n){ nid[n.id]=1; });
+  DATA={ brand:FULL.brand, navUser:FULL.navUser, snapshotId:FULL.snapshotId, nav:FULL.nav, modules:FULL.modules,
+    features:FULL.features.filter(function(f){ return f.moduleId===curMod; }),
+    specs:FULL.specs.filter(function(x){ return x.moduleId===curMod; }),
+    screens:FULL.screens.filter(function(x){ return x.moduleId===curMod; }),
+    flow:{ nodes:nodes, edges:FULL.flow.edges.filter(function(e){ return nid[e.from]&&nid[e.to]; }) } };
+}
+applyMod();
+function rerender(){ applyMod(); wireIdx=0; flowDrawn=false;
+  drawSpec(); renderWireSel(); showScreen(); validate();
+  setTab(st.tab && TITLES[st.tab] ? st.tab : 'spec'); }
 var st = (function(){ try{ return JSON.parse(localStorage.getItem('wsState'))||{}; }catch(e){ return {}; } })();
 function save(){ localStorage.setItem('wsState', JSON.stringify(st)); }
 function esc(v){ return (v==null?'':String(v)).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
@@ -339,7 +369,7 @@ function drawSpec(){
     tr.innerHTML='<td class="c-no">'+(i+1)+'</td><td><span class="cid" style="color:var(--p)">'+esc(s.id)+'</span><br>'+esc(s.title)+'</td>'+
       '<td>'+esc(s.input)+'</td><td>'+esc(s.output)+'</td><td>'+esc(s.businessRule)+'</td><td>'+esc(s.exception)+'</td>';
     tb.appendChild(tr); });
-  specPZ = panzoom($('#specCanvas'), $('#specVp'), false);
+  if(!specPZ) specPZ = panzoom($('#specCanvas'), $('#specVp'), false);
 }
 function toggleSpecTable(btn){ specTableOn=!specTableOn;
   $('#specTable').hidden=!specTableOn; $('#specCanvas').hidden=specTableOn;
@@ -360,7 +390,7 @@ function layout(){
   nodes.forEach(function(n){ if(depth[n.id]==null) depth[n.id]=md+1; });
   var byd={}, maxc=0; nodes.forEach(function(n){ (byd[depth[n.id]]=byd[depth[n.id]]||[]).push(n.id); });
   Object.keys(byd).forEach(function(d){ if(byd[d].length>maxc) maxc=byd[d].length; });
-  NPOS={}; var COLW=250, ROWH=104, midY=maxc*ROWH/2;
+  NPOS={}; var COLW=300, ROWH=120, midY=maxc*ROWH/2;
   Object.keys(byd).forEach(function(d){ var c=byd[d], off=midY-c.length*ROWH/2;
     c.forEach(function(id,i){ NPOS[id]={x:64+(+d)*COLW, y:40+off+i*ROWH}; }); });
   var sp=st.flowPos||{}; Object.keys(sp).forEach(function(id){ if(NPOS[id]) NPOS[id]=sp[id]; });
@@ -370,17 +400,43 @@ function edgePath(a,b){
   if(b.x < a.x){ y1=a.y+NH; y2=b.y+NH; var mx=(x1+x2)/2; return 'M'+(a.x+NW/2)+','+y1+' C'+(a.x+NW/2)+','+(y1+50)+' '+(b.x+NW/2)+','+(y2+50)+' '+(b.x+NW/2)+','+y2; }
   var mx=(x1+x2)/2; return 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2;
 }
-function labelPos(a,b){ return { x:(a.x+b.x)/2+NW/2, y:(a.y+b.y)/2+NH/2 }; }
+function labelPos(a,b){
+  if(b.x < a.x) return { x:(a.x+b.x)/2+NW/2, y:(a.y+b.y)/2+NH+38 }; // back-edge: 아래로 휜 곡선 중점
+  return { x:(a.x+b.x+NW)/2, y:(a.y+b.y)/2+NH/2 };                  // forward: 베지어 곡선 중점
+}
+function placeLabel(lg,a,b){
+  var lp=labelPos(a,b), t=lg.querySelector('text'), r=lg.querySelector('rect');
+  t.setAttribute('x',lp.x); t.setAttribute('y',lp.y);
+  var w=0; try{ w=t.getBBox().width; }catch(e){}
+  if(!w) w=(t.textContent||'').length*9.5; // hidden 상태 fallback
+  var rw=w+16, rh=18;
+  r.setAttribute('x',lp.x-rw/2); r.setAttribute('y',lp.y-rh/2);
+  r.setAttribute('width',rw); r.setAttribute('height',rh); r.setAttribute('rx',9);
+}
+function fitText(el, maxw){              // SVG text엔 ellipsis가 없어 직접 자른다
+  if(!el || !el.getComputedTextLength) return;
+  var L=el.getComputedTextLength();
+  if(!L || L<=maxw) return;             // 0=미렌더 또는 이미 맞음 -> 원본 유지
+  var s=el.textContent;
+  while(s.length>1){
+    s=s.slice(0,-1); el.textContent=s+'…';
+    if(el.getComputedTextLength()<=maxw) break;
+  }
+}
 function drawFlow(){
+  if(!DATA.flow.nodes.length){ var nn=$('#nodes'),ee=$('#edges'); if(nn)nn.innerHTML=''; if(ee)ee.innerHTML=''; return; }
   layout();
   var ng=$('#nodes'), eg=$('#edges'); ng.innerHTML=''; eg.innerHTML='';
   DATA.flow.edges.forEach(function(e){
     var a=NPOS[e.from], b=NPOS[e.to]; if(!a||!b) return;
     var p=document.createElementNS(SVGNS,'path'); p.setAttribute('class','edge');
     p.setAttribute('marker-end','url(#arrow)'); p.setAttribute('d', edgePath(a,b)); p.dataset.from=e.from; p.dataset.to=e.to; eg.appendChild(p);
-    if(e.condition){ var t=document.createElementNS(SVGNS,'text'); t.setAttribute('class','elabel');
-      t.dataset.from=e.from; t.dataset.to=e.to; var lp=labelPos(a,b);
-      t.setAttribute('x',lp.x); t.setAttribute('y',lp.y); t.textContent=e.condition; eg.appendChild(t); }
+    if(e.condition){
+      var lg=document.createElementNS(SVGNS,'g'); lg.setAttribute('class','elabel'); lg.dataset.from=e.from; lg.dataset.to=e.to;
+      var lr=document.createElementNS(SVGNS,'rect'); lr.setAttribute('class','elbg');
+      var lt=document.createElementNS(SVGNS,'text'); lt.setAttribute('class','eltx');
+      lt.setAttribute('text-anchor','middle'); lt.setAttribute('dominant-baseline','central'); lt.textContent=e.condition;
+      lg.appendChild(lr); lg.appendChild(lt); eg.appendChild(lg); placeLabel(lg,a,b); }
   });
   DATA.flow.nodes.forEach(function(n){
     var p=NPOS[n.id]; var g=document.createElementNS(SVGNS,'g'); g.setAttribute('class','node '+n.type);
@@ -389,13 +445,17 @@ function drawFlow(){
     g.innerHTML='<rect width="'+NW+'" height="'+NH+'"></rect>'+
       '<text class="ty" x="12" y="18">'+n.type+'</text>'+
       '<text class="lb" x="12" y="36">'+esc(n.label)+'</text>'+
-      (specs?'<text class="sp" x="12" y="50">'+esc(specs)+'</text>':'');
-    ng.appendChild(g); enableDrag(g,n);
+      (specs?'<text class="sp" x="12" y="50">'+esc(specs)+'</text><title>'+esc(specs)+'</title>':'');
+    ng.appendChild(g);
+    if(specs){ fitText(g.querySelector('.sp'), NW-24); } // 박스 안에서만 유지, 넘치면 끝을 …
+    enableDrag(g,n);
   });
-  flowPZ = panzoom($('#flowCanvas'), $('#flowVp'), true); fitFlow();
+  if(!flowPZ) flowPZ = panzoom($('#flowCanvas'), $('#flowVp'), true);
+  fitFlow();
 }
 function fitFlow(){ if(!flowPZ) return;
   var xs=[],ys=[]; DATA.flow.nodes.forEach(function(n){ var p=NPOS[n.id]; if(p){ xs.push(p.x,p.x+NW); ys.push(p.y,p.y+NH); } });
+  if(!xs.length) return;
   if(!xs.length) return;
   var minx=Math.min.apply(null,xs),maxx=Math.max.apply(null,xs),miny=Math.min.apply(null,ys),maxy=Math.max.apply(null,ys);
   var r=$('#flowCanvas').getBoundingClientRect(), pad=46;
@@ -413,7 +473,7 @@ function enableDrag(g,n){
 }
 function redrawEdges(){
   $$('#edges path').forEach(function(p){ var a=NPOS[p.dataset.from], b=NPOS[p.dataset.to]; if(a&&b) p.setAttribute('d',edgePath(a,b)); });
-  $$('#edges text').forEach(function(t){ var a=NPOS[t.dataset.from], b=NPOS[t.dataset.to]; if(a&&b){ var lp=labelPos(a,b); t.setAttribute('x',lp.x); t.setAttribute('y',lp.y); } });
+  $$('#edges .elabel').forEach(function(lg){ var a=NPOS[lg.dataset.from], b=NPOS[lg.dataset.to]; if(a&&b) placeLabel(lg,a,b); });
 }
 function specCardHTML(s){ return '<div class="card" style="position:static;margin-bottom:8px"><div class="cid">'+esc(s.id)+'</div><div class="ct">'+esc(s.title)+'</div>'+
   '<div class="kv"><b>입력</b> '+esc(s.input)+'</div><div class="kv"><b>출력</b> '+esc(s.output)+'</div>'+
@@ -456,7 +516,13 @@ var WIRECSS = "<style>*{box-sizing:border-box;margin:0;padding:0;font-family:-ap
   ".sb-cue{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:#e5484d;color:#fff;border:2px solid #fff;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:9}[data-nav]{cursor:pointer}[data-nav]:hover{outline:2px solid #2d6cdf;outline-offset:2px}</style>";
 var wireIdx=0, cueOn = st.cueOn!==false;
 function renderWireSel(){ var sel=$('#wireSel'); sel.innerHTML='';
-  DATA.screens.forEach(function(sc,i){ var o=document.createElement('option'); o.value=i; o.textContent=sc.id+' · '+sc.title; sel.appendChild(o); });
+  var byId={}; (DATA.modules||[]).forEach(function(m){ byId[m.id]=m; });
+  var order=[], seen={};
+  DATA.screens.forEach(function(sc,i){ var mid=sc.moduleId||'_'; if(!seen[mid]){ seen[mid]=[]; order.push(mid); } seen[mid].push(i); });
+  var useGroups=order.length>1;
+  order.forEach(function(mid){ var parent=sel;
+    if(useGroups){ var og=document.createElement('optgroup'); og.label=(byId[mid]?byId[mid].label:mid); sel.appendChild(og); parent=og; }
+    seen[mid].forEach(function(i){ var sc=DATA.screens[i]; var o=document.createElement('option'); o.value=i; o.textContent=sc.id+' · '+sc.title; parent.appendChild(o); }); });
   sel.value=wireIdx; sel.onchange=function(){ wireIdx=+sel.value; showScreen(); };
   $('#wirePrev').onclick=function(){ if(wireIdx>0){ wireIdx--; showScreen(); } };
   $('#wireNext').onclick=function(){ if(wireIdx<DATA.screens.length-1){ wireIdx++; showScreen(); } };
@@ -475,7 +541,10 @@ function shellHTML(sc){
     '<div class="wf-content">'+inner+'</div></div></div>';
 }
 function showScreen(){
-  var sc=DATA.screens[wireIdx]; var f=$('#wireFrame');
+  var f=$('#wireFrame');
+  if(!DATA.screens.length){ if(f) f.srcdoc=WIRECSS+'<div class="scr" style="padding:24px;color:#888">화면이 없습니다.</div>'; var wr=$('#wireRows'); if(wr) wr.innerHTML=''; return; }
+  if(wireIdx>=DATA.screens.length) wireIdx=0;
+  var sc=DATA.screens[wireIdx];
   if(sc.device){ vpMode=sc.device; applyVp(); }
   $('#wireSel').value=wireIdx; $('#wireState').textContent='['+(sc.state||'normal')+']';
   var useShell = DATA.nav && DATA.nav.length && sc.nav;
@@ -494,7 +563,7 @@ function showScreen(){
 function paintCues(){
   var f=$('#wireFrame'); var doc=f.contentDocument; if(!doc) return;
   $$('.sb-cue',doc).forEach(function(n){ n.remove(); });
-  if(!cueOn) return; var sc=DATA.screens[wireIdx];
+  if(!cueOn) return; var sc=DATA.screens[wireIdx]; if(!sc) return;
   (sc.elements||[]).forEach(function(e){ var el=doc.querySelector('[data-callout="'+e.calloutNo+'"]'); if(!el) return;
     var cs=doc.defaultView.getComputedStyle(el); if(cs.position==='static') el.style.position='relative';
     el.style.outline='1px dashed #e5484d'; el.style.outlineOffset='2px';
@@ -543,8 +612,8 @@ function validate(){
     d.querySelector('a').onclick=function(){ setTab(r[3]); }; out.appendChild(d); });
 }
 
-$('#exportBtn').onclick=function(){ var blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
-  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(DATA.snapshotId||'workspace')+'.json'; a.click(); };
+$('#exportBtn').onclick=function(){ var blob=new Blob([JSON.stringify(FULL,null,2)],{type:'application/json'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(FULL.snapshotId||'workspace')+'.json'; a.click(); };
 
 /* ---------- init ---------- */
 var vpMode = st.vpMode==='mobile' ? 'mobile' : 'web';
@@ -555,6 +624,14 @@ function applyFz(){ document.documentElement.style.setProperty('--fz', fz/100); 
 $('#fzRange').addEventListener('input', function(){ fz=+this.value; st.fz=fz; save(); applyFz(); });
 $('#snap').textContent='snapshot · '+(DATA.snapshotId||'');
 $('#snapVer').textContent=DATA.snapshotId||'-';
+curMod=(st.mod && FULL.modules.some(function(m){return m.id===st.mod;}))?st.mod:'all'; applyMod();
+(function(){ var sel=$('#modSel'); if(!sel) return;
+  if(FULL.modules.length>1){ sel.style.display='';
+    var oa=document.createElement('option'); oa.value='all'; oa.textContent='전체 ('+FULL.screens.length+'화면)'; sel.appendChild(oa);
+    FULL.modules.forEach(function(m){ var c=FULL.screens.filter(function(x){return x.moduleId===m.id;}).length;
+      var op=document.createElement('option'); op.value=m.id; op.textContent=m.label+' ('+c+')'; sel.appendChild(op); });
+    sel.value=curMod; sel.onchange=function(){ curMod=this.value; st.mod=curMod; save(); rerender(); };
+  } else { sel.style.display='none'; } })();
 drawSpec(); renderWireSel(); showScreen(); validate(); applyVp(); applyFz();
 setTab(st.tab && TITLES[st.tab] ? st.tab : 'spec');
 </script>
