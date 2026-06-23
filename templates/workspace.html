@@ -389,7 +389,7 @@ function toggleSpecTable(btn){ specTableOn=!specTableOn;
 
 /* ---------- 유저플로우: SVG node/edge ---------- */
 var flowPZ, flowDrawn=false, NPOS={}, NW=148, NH=58, ADJ={}, flowDragging=false;
-var flowArrange=(st.flowArrange==='module')?'module':'default', LANES=[];
+var flowArrange=(st.flowArrange==='default')?'default':'module', LANES=[];
 function layout(){
   if(flowArrange==='module' && curMod==='all'){ layoutByModule(); return; }
   LANES=[];
