@@ -69,6 +69,13 @@
   .flow .edge{fill:none;stroke:#9aa4b2;stroke-width:1.6}
   .flow .elabel .elbg{fill:#fff;stroke:#dbe2ea;stroke-width:1;opacity:.96}
   .flow .elabel .eltx{fill:#475569;font-size:11px;font-weight:600}
+  .flow .edge.back{stroke:#f59e0b;stroke-dasharray:5 4}
+  .flow .elabel.back .elbg{stroke:#f6c66b}
+  .flow .elabel.back .eltx{fill:#b45309}
+  .flow .node,.flow .edge,.flow .elabel{transition:opacity .12s}
+  .flow .node.dim,.flow .edge.dim,.flow .elabel.dim{opacity:.1}
+  .flow .node.hl rect{stroke-width:2.5}
+  .flow .edge.hl{stroke-width:2.6}
   .node{cursor:grab}
   .node rect{rx:9;stroke-width:1.5;fill:#fff}
   .node.sel rect{stroke-width:3}
@@ -168,7 +175,9 @@
       <div class="canvas" id="flowCanvas">
         <svg class="flow" id="flowSvg">
           <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L8,3 L0,6 Z" fill="#9aa4b2"/></marker></defs>
+            <path d="M0,0 L8,3 L0,6 Z" fill="#9aa4b2"/></marker>
+          <marker id="arrow-back" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#f59e0b"/></marker></defs>
           <g id="flowVp"><g id="edges"></g><g id="nodes"></g></g>
         </svg>
       </div>
@@ -376,7 +385,7 @@ function toggleSpecTable(btn){ specTableOn=!specTableOn;
   if(btn) btn.setAttribute('aria-pressed', specTableOn); }
 
 /* ---------- 유저플로우: SVG node/edge ---------- */
-var flowPZ, flowDrawn=false, NPOS={}, NW=148, NH=58;
+var flowPZ, flowDrawn=false, NPOS={}, NW=148, NH=58, ADJ={}, flowDragging=false;
 function layout(){
   var nodes=DATA.flow.nodes, edges=DATA.flow.edges, adj={}, indeg={};
   nodes.forEach(function(n){ adj[n.id]=[]; indeg[n.id]=0; });
@@ -395,17 +404,23 @@ function layout(){
     c.forEach(function(id,i){ NPOS[id]={x:64+(+d)*COLW, y:40+off+i*ROWH}; }); });
   var sp=st.flowPos||{}; Object.keys(sp).forEach(function(id){ if(NPOS[id]) NPOS[id]=sp[id]; });
 }
-function edgePath(a,b){
-  var x1=a.x+NW, y1=a.y+NH/2, x2=b.x, y2=b.y+NH/2;
-  if(b.x < a.x){ y1=a.y+NH; y2=b.y+NH; var mx=(x1+x2)/2; return 'M'+(a.x+NW/2)+','+y1+' C'+(a.x+NW/2)+','+(y1+50)+' '+(b.x+NW/2)+','+(y2+50)+' '+(b.x+NW/2)+','+y2; }
-  var mx=(x1+x2)/2; return 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2;
+function edgePath(a,b,sp,tp){
+  sp=(sp==null)?0.5:sp; tp=(tp==null)?0.5:tp;        // 출발/도착 포트(노드 변에서 0~1 위치)
+  if(b.x < a.x){ // back-edge: 하단으로 휘는 곡선, 포트는 x로 분산
+    var bx1=a.x+NW*sp, bx2=b.x+NW*tp, by1=a.y+NH, by2=b.y+NH, dip=42+Math.abs(by2-by1)*0.25;
+    return 'M'+bx1+','+by1+' C'+bx1+','+(by1+dip)+' '+bx2+','+(by2+dip)+' '+bx2+','+by2;
+  }
+  var x1=a.x+NW, y1=a.y+NH*sp, x2=b.x, y2=b.y+NH*tp, mx=(x1+x2)/2;
+  return 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2;
 }
-function labelPos(a,b){
-  if(b.x < a.x) return { x:(a.x+b.x)/2+NW/2, y:(a.y+b.y)/2+NH+38 }; // back-edge: 아래로 휜 곡선 중점
-  return { x:(a.x+b.x+NW)/2, y:(a.y+b.y)/2+NH/2 };                  // forward: 베지어 곡선 중점
+function labelPos(a,b,sp,tp){
+  sp=(sp==null)?0.5:sp; tp=(tp==null)?0.5:tp;
+  if(b.x < a.x){ var dip=42+Math.abs(b.y-a.y)*0.25;
+    return { x:(a.x+NW*sp+b.x+NW*tp)/2, y:(a.y+b.y)/2+NH+dip*0.72 }; } // 하단 곡선 중점
+  return { x:(a.x+b.x+NW)/2, y:(a.y+b.y)/2+NH*(sp+tp)/2 };             // forward 곡선 중점
 }
-function placeLabel(lg,a,b){
-  var lp=labelPos(a,b), t=lg.querySelector('text'), r=lg.querySelector('rect');
+function placeLabel(lg,a,b,sp,tp){
+  var lp=labelPos(a,b,sp,tp), t=lg.querySelector('text'), r=lg.querySelector('rect');
   t.setAttribute('x',lp.x); t.setAttribute('y',lp.y);
   var w=0; try{ w=t.getBBox().width; }catch(e){}
   if(!w) w=(t.textContent||'').length*9.5; // hidden 상태 fallback
@@ -413,6 +428,14 @@ function placeLabel(lg,a,b){
   r.setAttribute('x',lp.x-rw/2); r.setAttribute('y',lp.y-rh/2);
   r.setAttribute('width',rw); r.setAttribute('height',rh); r.setAttribute('rx',9);
 }
+function focusNode(id){            // hover: 연결된 노드/엣지/라벨만 강조, 나머지 흐림
+  if(!ADJ[id]) return;
+  var keep={}; keep[id]=1; Object.keys(ADJ[id]).forEach(function(k){ keep[k]=1; });
+  $$('#nodes .node').forEach(function(g){ var on=!!keep[g.dataset.id]; g.classList.toggle('hl',on); g.classList.toggle('dim',!on); });
+  $$('#edges path').forEach(function(p){ var on=(p.dataset.from===id||p.dataset.to===id); p.classList.toggle('hl',on); p.classList.toggle('dim',!on); });
+  $$('#edges .elabel').forEach(function(l){ var on=(l.dataset.from===id||l.dataset.to===id); l.classList.toggle('hl',on); l.classList.toggle('dim',!on); });
+}
+function clearFocus(){ $$('#nodes .node,#edges path,#edges .elabel').forEach(function(el){ el.classList.remove('hl','dim'); }); }
 function fitText(el, maxw){              // SVG text엔 ellipsis가 없어 직접 자른다
   if(!el || !el.getComputedTextLength) return;
   var L=el.getComputedTextLength();
@@ -427,16 +450,24 @@ function drawFlow(){
   if(!DATA.flow.nodes.length){ var nn=$('#nodes'),ee=$('#edges'); if(nn)nn.innerHTML=''; if(ee)ee.innerHTML=''; return; }
   layout();
   var ng=$('#nodes'), eg=$('#edges'); ng.innerHTML=''; eg.innerHTML='';
-  DATA.flow.edges.forEach(function(e){
-    var a=NPOS[e.from], b=NPOS[e.to]; if(!a||!b) return;
-    var p=document.createElementNS(SVGNS,'path'); p.setAttribute('class','edge');
-    p.setAttribute('marker-end','url(#arrow)'); p.setAttribute('d', edgePath(a,b)); p.dataset.from=e.from; p.dataset.to=e.to; eg.appendChild(p);
+  var valid=DATA.flow.edges.filter(function(e){ return NPOS[e.from]&&NPOS[e.to]; });
+  ADJ={}; DATA.flow.nodes.forEach(function(n){ ADJ[n.id]={}; });
+  var outP={}, inP={};   // 노드별 출발/도착 엣지 -> 포트 분산
+  valid.forEach(function(e){ if(ADJ[e.from])ADJ[e.from][e.to]=1; if(ADJ[e.to])ADJ[e.to][e.from]=1;
+    (outP[e.from]=outP[e.from]||[]).push(e); (inP[e.to]=inP[e.to]||[]).push(e); });
+  Object.keys(outP).forEach(function(id){ var ar=outP[id]; ar.sort(function(x,y){return NPOS[x.to].y-NPOS[y.to].y;}); ar.forEach(function(e,i){ e._sp=(i+1)/(ar.length+1); }); });
+  Object.keys(inP).forEach(function(id){ var ar=inP[id]; ar.sort(function(x,y){return NPOS[x.from].y-NPOS[y.from].y;}); ar.forEach(function(e,i){ e._tp=(i+1)/(ar.length+1); }); });
+  valid.forEach(function(e){
+    var a=NPOS[e.from], b=NPOS[e.to], back=b.x<a.x, sp=e._sp==null?0.5:e._sp, tp=e._tp==null?0.5:e._tp;
+    var p=document.createElementNS(SVGNS,'path'); p.setAttribute('class','edge'+(back?' back':''));
+    p.setAttribute('marker-end', back?'url(#arrow-back)':'url(#arrow)'); p.setAttribute('d', edgePath(a,b,sp,tp));
+    p.dataset.from=e.from; p.dataset.to=e.to; p.dataset.sp=sp; p.dataset.tp=tp; eg.appendChild(p);
     if(e.condition){
-      var lg=document.createElementNS(SVGNS,'g'); lg.setAttribute('class','elabel'); lg.dataset.from=e.from; lg.dataset.to=e.to;
+      var lg=document.createElementNS(SVGNS,'g'); lg.setAttribute('class','elabel'+(back?' back':'')); lg.dataset.from=e.from; lg.dataset.to=e.to; lg.dataset.sp=sp; lg.dataset.tp=tp;
       var lr=document.createElementNS(SVGNS,'rect'); lr.setAttribute('class','elbg');
       var lt=document.createElementNS(SVGNS,'text'); lt.setAttribute('class','eltx');
       lt.setAttribute('text-anchor','middle'); lt.setAttribute('dominant-baseline','central'); lt.textContent=e.condition;
-      lg.appendChild(lr); lg.appendChild(lt); eg.appendChild(lg); placeLabel(lg,a,b); }
+      lg.appendChild(lr); lg.appendChild(lt); eg.appendChild(lg); placeLabel(lg,a,b,sp,tp); }
   });
   DATA.flow.nodes.forEach(function(n){
     var p=NPOS[n.id]; var g=document.createElementNS(SVGNS,'g'); g.setAttribute('class','node '+n.type);
@@ -445,9 +476,11 @@ function drawFlow(){
     g.innerHTML='<rect width="'+NW+'" height="'+NH+'"></rect>'+
       '<text class="ty" x="12" y="18">'+n.type+'</text>'+
       '<text class="lb" x="12" y="36">'+esc(n.label)+'</text>'+
-      (specs?'<text class="sp" x="12" y="50">'+esc(specs)+'</text><title>'+esc(specs)+'</title>':'');
+      (specs?'<text class="sp" x="12" y="50">'+esc(specs)+'</text>':'');
     ng.appendChild(g);
     if(specs){ fitText(g.querySelector('.sp'), NW-24); } // 박스 안에서만 유지, 넘치면 끝을 …
+    g.addEventListener('pointerenter',function(){ if(!flowDragging) focusNode(n.id); });
+    g.addEventListener('pointerleave',function(){ if(!flowDragging) clearFocus(); });
     enableDrag(g,n);
   });
   if(!flowPZ) flowPZ = panzoom($('#flowCanvas'), $('#flowVp'), true);
@@ -464,16 +497,16 @@ function fitFlow(){ if(!flowPZ) return;
 }
 function enableDrag(g,n){
   var dragging=false,moved=false,ox,oy;
-  g.addEventListener('pointerdown',function(e){ e.stopPropagation(); dragging=true; moved=false;
+  g.addEventListener('pointerdown',function(e){ e.stopPropagation(); dragging=true; moved=false; flowDragging=true; clearFocus();
     var sc=flowPZ?flowPZ.scale():1; ox=e.clientX/sc-NPOS[n.id].x; oy=e.clientY/sc-NPOS[n.id].y; g.setPointerCapture(e.pointerId);
     $$('#nodes .node').forEach(function(x){ x.classList.remove('sel'); }); g.classList.add('sel'); showNodeSpec(n); });
   g.addEventListener('pointermove',function(e){ if(!dragging)return; moved=true; var sc=flowPZ?flowPZ.scale():1;
     NPOS[n.id]={x:e.clientX/sc-ox, y:e.clientY/sc-oy}; g.setAttribute('transform','translate('+NPOS[n.id].x+','+NPOS[n.id].y+')'); redrawEdges(); });
-  g.addEventListener('pointerup',function(){ dragging=false; if(moved){ st.flowPos=NPOS; save(); } });
+  g.addEventListener('pointerup',function(){ dragging=false; flowDragging=false; if(moved){ st.flowPos=NPOS; save(); } });
 }
 function redrawEdges(){
-  $$('#edges path').forEach(function(p){ var a=NPOS[p.dataset.from], b=NPOS[p.dataset.to]; if(a&&b) p.setAttribute('d',edgePath(a,b)); });
-  $$('#edges .elabel').forEach(function(lg){ var a=NPOS[lg.dataset.from], b=NPOS[lg.dataset.to]; if(a&&b) placeLabel(lg,a,b); });
+  $$('#edges path').forEach(function(p){ var a=NPOS[p.dataset.from], b=NPOS[p.dataset.to]; if(a&&b) p.setAttribute('d',edgePath(a,b,+p.dataset.sp,+p.dataset.tp)); });
+  $$('#edges .elabel').forEach(function(lg){ var a=NPOS[lg.dataset.from], b=NPOS[lg.dataset.to]; if(a&&b) placeLabel(lg,a,b,+lg.dataset.sp,+lg.dataset.tp); });
 }
 function specCardHTML(s){ return '<div class="card" style="position:static;margin-bottom:8px"><div class="cid">'+esc(s.id)+'</div><div class="ct">'+esc(s.title)+'</div>'+
   '<div class="kv"><b>입력</b> '+esc(s.input)+'</div><div class="kv"><b>출력</b> '+esc(s.output)+'</div>'+
