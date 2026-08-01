@@ -1,6 +1,6 @@
 ---
 name: superpm
-description: "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, GTM, growth, pricing, positioning, market signals, release notes, retros, and resume reviews."
+description: PM artifacts verified by a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, or GTM.
 ---
 
 # /superpm - one PM request, a verified artifact
