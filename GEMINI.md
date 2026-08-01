@@ -1,4 +1,4 @@
 # superpm
 
-@./SKILL.md
+@./skills/superpm/SKILL.md
 
