@@ -1,0 +1,21 @@
+{
+  "name": "superpm",
+  "interface": {
+    "displayName": "Superpm"
+  },
+  "plugins": [
+    {
+      "name": "superpm",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/cskwork/superpm-skill.git",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 ### Install
 
 ```bash
-claude plugin marketplace add cskwork/superpm
+claude plugin marketplace add cskwork/superpm-skill
 claude plugin install superpm@superpm
 ```
 
@@ -39,7 +39,7 @@ claude plugin marketplace remove superpm
 ### Install
 
 ```bash
-codex plugin marketplace add cskwork/superpm --ref main
+codex plugin marketplace add cskwork/superpm-skill --ref main
 codex plugin add superpm@superpm
 ```
 
@@ -66,14 +66,14 @@ codex plugin marketplace remove superpm
 ### Install (extension, always-on)
 
 ```bash
-gemini extensions install https://github.com/cskwork/superpm
+gemini extensions install https://github.com/cskwork/superpm-skill
 ```
 
 ### Install (command, opt-in)
 
 ```bash
 mkdir -p ~/.gemini/commands
-curl -fsSL https://raw.githubusercontent.com/cskwork/superpm/main/skills/superpm/agents/gemini.toml \
+curl -fsSL https://raw.githubusercontent.com/cskwork/superpm-skill/main/skills/superpm-skill/agents/gemini.toml \
   -o ~/.gemini/commands/superpm.toml
 ```
 
@@ -99,8 +99,8 @@ gemini extensions uninstall superpm
 ### Install
 
 ```bash
-npx skills add cskwork/superpm
-npx skills add cskwork/superpm -g
+npx skills add cskwork/superpm-skill
+npx skills add cskwork/superpm-skill -g
 ```
 
 Type `/superpm` in a new agent chat.
@@ -131,7 +131,7 @@ npx skills remove superpm
 ### Install
 
 ```bash
-agy plugin install https://github.com/cskwork/superpm
+agy plugin install https://github.com/cskwork/superpm-skill
 ```
 
 ### Verify
