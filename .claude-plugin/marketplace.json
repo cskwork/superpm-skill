@@ -1,14 +1,14 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "superpm",
-  "description": "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, ana",
+  "description": "PM artifacts verified by a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, or GTM.",
   "owner": {
     "name": "cskwork"
   },
   "plugins": [
     {
       "name": "superpm",
-      "description": "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, ana",
+      "description": "PM artifacts verified by a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, or GTM.",
       "source": "./",
       "category": "productivity"
     }
