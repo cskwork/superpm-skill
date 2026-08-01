@@ -15,7 +15,7 @@
     "claude-code",
     "codex"
   ],
-  "skills": "./",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Superpm",
     "shortDescription": "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strate",
