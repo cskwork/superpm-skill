@@ -1,5 +1,6 @@
-node_modules/
-data/
 .DS_Store
-.superpm/
-*.png
+__pycache__/
+*.py[cod]
+evals/results/
+node_modules/
+dist/

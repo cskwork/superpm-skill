@@ -1,0 +1,34 @@
+{
+  "name": "superpm",
+  "version": "0.1.0",
+  "description": "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, GTM, growth, pricing, positioning, market signals, release notes, retros, and resume reviews.",
+  "author": {
+    "name": "cskwork",
+    "url": "https://github.com/cskwork"
+  },
+  "homepage": "https://github.com/cskwork/superpm",
+  "repository": "https://github.com/cskwork/superpm",
+  "license": "MIT",
+  "keywords": [
+    "superpm",
+    "skill",
+    "claude-code",
+    "codex"
+  ],
+  "skills": "./",
+  "interface": {
+    "displayName": "Superpm",
+    "shortDescription": "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strate",
+    "longDescription": "Produce focused PM artifacts and verify them with a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, GTM, growth, pricing, positioning, market signals, release notes, retros, and resume reviews.",
+    "developerName": "cskwork",
+    "category": "Productivity",
+    "capabilities": [
+      "Instructions"
+    ],
+    "websiteURL": "https://github.com/cskwork/superpm",
+    "defaultPrompt": [
+      "Use superpm for this task."
+    ],
+    "brandColor": "#2563EB"
+  }
+}
