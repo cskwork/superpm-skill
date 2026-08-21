@@ -1,6 +1,6 @@
 ---
 name: superpm
-description: PM artifacts verified by a critic. Use for PRDs, strategy, OKRs, roadmaps, specs, research, analytics, or GTM.
+description: PM artifacts verified by a critic. Use for PRDs, OKRs, and roadmaps; product strategy; discovery and prioritization; market and customer research; analytics read-outs; GTM; positioning and naming; user flows; 화면설계서/screen specs; dev hand-off packages; end-to-end feature planning (기획); resume and policy-doc review; or documenting an AI-built app.
 ---
 
 # /superpm - one PM request, a verified artifact
@@ -18,8 +18,7 @@ one-paragraph note you could write directly, skip the skill.
 - **Smallest useful artifact.** Only the frameworks the decision needs - no bolted-on
   SWOT/persona/roadmap when the ask was one pricing call.
 - **Ground claims in evidence.** Numbers, quotes, segments come from the user's data, docs, or
-  named assumptions - never invented. Market/customer claims: pull real signal via
-  `reference/signal.md` (read-only, keyless) before asserting.
+  named assumptions - never invented.
 - **Surface hidden assumptions.** The critic names unstated assumptions and missing pieces as
   risks - never present an assumption as fact.
 - **Ask only when genuinely ambiguous.** Read the repo/docs/data first; interview only
@@ -73,8 +72,8 @@ in `reference/signal.md` first.
 
 4. **Critic (independent).** Run `reference/critic.md`. Independence is mechanical: if the
    harness supports subagents, hand a fresh one only the `## Intent` block + the draft;
-   otherwise switch stance and read cold. Red-team: missing framework sections, unsupported
-   claims, unvalidated assumptions, dodged decisions - each emitted as a risk. Do not
+   otherwise switch stance and read cold. Red-team all four checks: missing framework sections,
+   unsupported claims, dodged decisions, unvalidated assumptions - each emitted as a risk. Do not
    self-congratulate a draft to green.
 
 5. **Deliver.** Fold blockers and gaps back in; leave user-owned risks in a `## Critic` block.
@@ -113,7 +112,7 @@ The loop is per-artifact, not per-message. On iteration:
 | `reference/discover.md` | DISCOVER: ideation, assumptions, OST, prioritization, interviews, metrics |
 | `reference/strategy.md` | STRATEGY: strategy canvas, vision, value prop, lean/business model, pricing, analysis frameworks |
 | `reference/execute.md` | EXECUTE: PRD, OKRs, roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization |
-| `reference/flow.md` | FLOW: user-flow graph - nodes derived from SPECs (R2), page->screen hand-off (R3), zero-dep visualization (text list + .wf-* boxes) |
+| `reference/flow.md` | FLOW: user-flow graph - nodes derived from SPECs (R2), page->screen hand-off (R3), zero-dep visualization (text step list + `templates/workspace.html` FLOW SVG canvas) |
 | `reference/storyboard.md` | STORYBOARD: 화면설계서/기능명세 - derive screens, per-element spec; **default output `templates/workspace.html`** (interactive 3-tab SSOT canvas: 기능명세/유저플로우/와이어프레임); per-screen image-replica set (Mode A) optional via bundled HTML / `storyboard-spec` |
 | `reference/package.md` | PACKAGE: integrated implementation bundle - one snapshotId over PRD+spec+flow+wireframe (R6), back-link integrity, md/json/svg/html export |
 | `reference/research.md` | RESEARCH: personas, segments, journey map, market sizing, competitor, sentiment |
