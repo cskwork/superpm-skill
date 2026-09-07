@@ -1,6 +1,6 @@
 ---
 name: superpm
-description: PM artifacts verified by a critic. Use for PRDs, OKRs, and roadmaps; product strategy; discovery and prioritization; market and customer research; analytics read-outs; GTM; positioning and naming; user flows; 화면설계서/screen specs; dev hand-off packages; end-to-end feature planning (기획); resume and policy-doc review; or documenting an AI-built app.
+description: Produce product planning, strategy, research, analytics, and launch artifacts with independent critique. Includes PRDs, roadmaps, user flows, screen specs, implementation handoffs, and resume or policy-document review.
 ---
 
 # /superpm - one PM request, a verified artifact
@@ -100,28 +100,17 @@ The loop is per-artifact, not per-message. On iteration:
   DISCOVER follows the idea-proposal batch rule (`reference/discover.md`).
 - Keep the loaded domain reference; do not re-read it each turn.
 
-## Reference map
+## Shared references
+
+The domain table above routes domain-specific reading. Load these only when needed:
 
 | Read | When |
 |---|---|
-| `reference/intent.md` | Capture: ambiguity-gated <=5 question interview before drafting |
-| `reference/critic.md` | Critic: independent red-team verification gate (every domain) |
-| `reference/signal.md` | Signal: live market & customer evidence (voice of customer), read-only + keyless; feeds RESEARCH/DISCOVER/GTM, delegates to the `last30days` skill if present |
-| `reference/model.md` | MODEL: shared data contract (SSOT) - identifiers, entities, sync rules R1-R6, validation codes; flow/storyboard/package/critic reference it (cross-cutting) |
-| `reference/plan.md` | PLAN: stepped build-planning session - EXECUTE→FLOW→STORYBOARD→PACKAGE over one SSOT, gated per stage (orchestrator) |
-| `reference/discover.md` | DISCOVER: ideation, assumptions, OST, prioritization, interviews, metrics |
-| `reference/strategy.md` | STRATEGY: strategy canvas, vision, value prop, lean/business model, pricing, analysis frameworks |
-| `reference/execute.md` | EXECUTE: PRD, OKRs, roadmap, sprint, retro, pre-mortem, stories, stakeholder map, prioritization |
-| `reference/flow.md` | FLOW: user-flow graph - nodes derived from SPECs (R2), page->screen hand-off (R3), zero-dep visualization (text step list + `templates/workspace.html` FLOW SVG canvas) |
-| `reference/storyboard.md` | STORYBOARD: 화면설계서/기능명세 - derive screens, per-element spec; **default output `templates/workspace.html`** (interactive 3-tab SSOT canvas: 기능명세/유저플로우/와이어프레임); per-screen image-replica set (Mode A) optional via bundled HTML / `storyboard-spec` |
-| `reference/package.md` | PACKAGE: integrated implementation bundle - one snapshotId over PRD+spec+flow+wireframe (R6), back-link integrity, md/json/svg/html export |
-| `reference/research.md` | RESEARCH: personas, segments, journey map, market sizing, competitor, sentiment |
-| `reference/analytics.md` | ANALYTICS: NL->SQL, cohort, A/B test |
-| `reference/gtm.md` | GTM: strategy, beachhead, ICP, growth loops, motions, battlecard |
-| `reference/growth.md` | GROWTH: marketing ideas, positioning, value-prop statements, naming, North Star |
-| `reference/toolkit.md` | TOOLKIT: resume, NDA, privacy policy, proofread |
-| `reference/ai-ship.md` | AI-SHIP: shipping artifacts, intended-vs-implemented |
-| `templates/` | Reusable artifact scaffolds (PRD, strategy canvas, OST, battlecard, storyboard page/board, workspace 3-tab, ...) |
+| `reference/intent.md` | Capture: unresolved choices that only the user can answer |
+| `reference/critic.md` | Independent review against the artifact's intent |
+| `reference/signal.md` | Current market/customer evidence; uses `last30days` if installed |
+| `reference/model.md` | Shared SPEC identifiers, entities, sync rules R1-R6, and validation codes for FLOW/STORYBOARD/PACKAGE |
+| `templates/` | Artifact scaffolds, including the shared `templates/workspace.html` canvas |
 
 ## Output language
 
